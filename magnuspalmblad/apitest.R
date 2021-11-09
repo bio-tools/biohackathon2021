@@ -1,5 +1,6 @@
 library(jsonlite)
 library(stringr)
+library(ggplot2)
 
 # N.B. This R script attempts to extract gender bias in the people credited
 # in the bio.tools entries in different topics or tool collections. In doing
@@ -35,3 +36,13 @@ for(i in 1:length(tools)) {
 # topic=proteomics: 11.8% female (10 female, 75 male)
 # topic-genomics: 19.5% female (16 female, 66 male)
 # topic-biodiversity: 19.5% female (8 female, 33 male)
+
+df <- data.frame(topic=c(rep("biodiversity",2), rep("genomics",2),
+                         rep("proteomics",2), rep("metabolomics",2)),
+                 gender=rep(c("female","male"),4),
+                 credits=c(8*100/76,33*100/76,16,66,10,75,16,63))
+
+ggplot(data=df, aes(x=topic, y=credits, fill=gender)) +
+  geom_bar(stat="identity") +
+  ylim(c(0,100)) +
+  ylab("credits/100 bio.tools records")
