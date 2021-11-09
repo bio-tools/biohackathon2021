@@ -5,7 +5,6 @@ library(forcats)
 library(ggsci)
 library(europepmc)
 
-setwd("C:/Users/nmpalmblad/Desktop")
 # This is just a sandbox created during BioHackathon 2021
 
 # Example 1: get first credited person for 100 top tools for certain EDAM topic,
