@@ -9,10 +9,10 @@ library(stringr)
 # individual contributors, only aggregate statistics.
 
 # fetch bio.tools records
-tools <- read_json('https://bio.tools/api/tool/?topic=genomics&format=json&page=1')$list
+tools <- read_json('https://bio.tools/api/tool/?topic=biodiversity&format=json&page=1')$list
 
 for(i in 2:10) {tools <- c(tools, read_json(
-              paste0('https://bio.tools/api/tool/?topic=genomics&format=json&page=',i))$list)
+              paste0('https://bio.tools/api/tool/?topic=biodiversity&format=json&page=',i))$list)
 }
 
 male <- 0
@@ -34,3 +34,4 @@ for(i in 1:length(tools)) {
 # topic=metabolomics: 20.3% female (16 female, 63 male)
 # topic=proteomics: 11.8% female (10 female, 75 male)
 # topic-genomics: 19.5% female (16 female, 66 male)
+# topic-biodiversity: 19.5% female (8 female, 33 male)
