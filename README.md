@@ -1,1 +1,1 @@
-# biohackathon2021
+# BioHackathon Europe 2021
