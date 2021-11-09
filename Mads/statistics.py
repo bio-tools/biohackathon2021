@@ -34,6 +34,7 @@ def calculate_statistics(raw_tools: list):
 def calculate_edam_topic_statistics(tools: list) -> dict:
     """
     Calculate the statistics for EDAM topics.
+
     :param tools: The tool list.
     :return: The dictionary with the terms, the IDs and counts for strict (Only the specific term)
         and total (for parent terms).
@@ -63,7 +64,7 @@ def _get_index_list(term_type: str):
     Get the index list
 
     :param term_type: The EDAM term type.
-    :return:
+    :return: The index list.
     """
     if term_type.capitalize() not in ["Topic", "Operation", "Format", "Data"]:
         raise ValueError(f"The term type '{term_type}' is not valid. Must be 'Topic', 'Operation', 'Format', or"
@@ -77,7 +78,8 @@ def _get_index_list(term_type: str):
 
 def _add_terms(stats: dict, term: dict, tool_id: dict, index_list: dict) -> dict:
     """
-    Add term to the statistics
+    Add term to the statistics.
+
     :param stats: The statistics dictionary.
     :param term: The EDAM term.
     :param tool_id: The bio.tools ID.
@@ -100,6 +102,7 @@ def _add_terms(stats: dict, term: dict, tool_id: dict, index_list: dict) -> dict
 def _get_branch_terms(term_id: str, term_index: dict) -> list:
     """
     Get the branch terms.
+
     :param term_id: The term ID.
     :param term_index: The term index list.
     :return: The list of branch terms.
