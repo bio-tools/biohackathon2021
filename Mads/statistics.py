@@ -17,6 +17,7 @@ def main():
 def calculate_statistics(raw_tools: list):
     """
     Calculate the statistics (Main function).
+    
     :param raw_tools: The raw list of tools.
     :return:
     """
