@@ -28,7 +28,7 @@ def calculate_statistics(raw_tools: list):
     # Calculate the EDAM term statistics
     topic_stats = calculate_edam_topic_statistics(tools=tools)
 
-    with open("Resources/Topics.json", "w") as f:
+    with open("Resources/SmallTopics.json", "w") as f:
         f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
 
 

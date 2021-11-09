@@ -15,15 +15,15 @@
         "strict_ids": [],
         "total_ids": [
             "bgeecall",
-            "labrat",
             "bgeedb",
-            "biomodels-parameter",
-            "bgee",
             "pftools",
             "selectome",
+            "bgee",
+            "metanetx",
             "myhits",
-            "biomodels",
-            "metanetx"
+            "biomodels-parameter",
+            "labrat",
+            "biomodels"
         ],
         "strict_count": 0,
         "total_count": 10
@@ -32,15 +32,15 @@
         "strict_ids": [],
         "total_ids": [
             "bgeecall",
-            "labrat",
             "bgeedb",
-            "biomodels-parameter",
-            "bgee",
             "pftools",
             "selectome",
+            "bgee",
+            "metanetx",
             "myhits",
-            "biomodels",
-            "metanetx"
+            "biomodels-parameter",
+            "labrat",
+            "biomodels"
         ],
         "strict_count": 0,
         "total_count": 10
@@ -59,9 +59,9 @@
         "strict_ids": [],
         "total_ids": [
             "pftools",
-            "labrat",
             "bgee",
-            "metanetx"
+            "metanetx",
+            "labrat"
         ],
         "strict_count": 0,
         "total_count": 4
@@ -141,13 +141,13 @@
         "strict_ids": [],
         "total_ids": [
             "bgeecall",
-            "labrat",
             "bgeedb",
-            "biomodels-parameter",
-            "bgee",
             "selectome",
-            "biomodels",
-            "metanetx"
+            "bgee",
+            "metanetx",
+            "biomodels-parameter",
+            "labrat",
+            "biomodels"
         ],
         "strict_count": 0,
         "total_count": 8
@@ -173,21 +173,21 @@
     "topic_0605": {
         "strict_ids": [],
         "total_ids": [
-            "bgeedb",
-            "metanetx"
+            "metanetx",
+            "bgeedb"
         ],
         "strict_count": 0,
         "total_count": 2
     },
     "topic_2259": {
         "strict_ids": [
-            "biomodels",
             "biomodels-parameter",
+            "biomodels",
             "metanetx"
         ],
         "total_ids": [
-            "biomodels",
             "biomodels-parameter",
+            "biomodels",
             "metanetx"
         ],
         "strict_count": 3,
@@ -205,13 +205,13 @@
     },
     "topic_0602": {
         "strict_ids": [
-            "biomodels",
             "biomodels-parameter",
+            "biomodels",
             "metanetx"
         ],
         "total_ids": [
-            "biomodels",
             "biomodels-parameter",
+            "biomodels",
             "metanetx"
         ],
         "strict_count": 3,
@@ -245,15 +245,15 @@
     },
     "topic_0203": {
         "strict_ids": [
-            "bgeedb",
             "bgeecall",
+            "bgeedb",
             "labrat"
         ],
         "total_ids": [
-            "bgeedb",
+            "bgee",
             "bgeecall",
-            "labrat",
-            "bgee"
+            "bgeedb",
+            "labrat"
         ],
         "strict_count": 3,
         "total_count": 4
@@ -261,10 +261,10 @@
     "topic_3053": {
         "strict_ids": [],
         "total_ids": [
-            "bgeedb",
+            "bgee",
             "bgeecall",
-            "labrat",
-            "bgee"
+            "bgeedb",
+            "labrat"
         ],
         "strict_count": 0,
         "total_count": 4
@@ -272,10 +272,10 @@
     "topic_3321": {
         "strict_ids": [],
         "total_ids": [
-            "bgeedb",
+            "bgee",
             "bgeecall",
-            "labrat",
-            "bgee"
+            "bgeedb",
+            "labrat"
         ],
         "strict_count": 0,
         "total_count": 4
@@ -302,12 +302,12 @@
     },
     "topic_3308": {
         "strict_ids": [
-            "labrat",
-            "bgee"
+            "bgee",
+            "labrat"
         ],
         "total_ids": [
-            "labrat",
-            "bgee"
+            "bgee",
+            "labrat"
         ],
         "strict_count": 2,
         "total_count": 2
@@ -315,8 +315,8 @@
     "topic_0622": {
         "strict_ids": [],
         "total_ids": [
-            "labrat",
-            "bgee"
+            "bgee",
+            "labrat"
         ],
         "strict_count": 0,
         "total_count": 2
