@@ -1,0 +1,465 @@
+{
+    "topic_0080": {
+        "strict_ids": [
+            "pftools"
+        ],
+        "total_ids": [
+            "pftools",
+            "bgeedb",
+            "selectome"
+        ],
+        "strict_count": 1,
+        "total_count": 3
+    },
+    "topic_0003": {
+        "strict_ids": [],
+        "total_ids": [
+            "bgeecall",
+            "labrat",
+            "bgeedb",
+            "biomodels-parameter",
+            "bgee",
+            "pftools",
+            "selectome",
+            "myhits",
+            "biomodels",
+            "metanetx"
+        ],
+        "strict_count": 0,
+        "total_count": 10
+    },
+    "topic_3307": {
+        "strict_ids": [],
+        "total_ids": [
+            "bgeecall",
+            "labrat",
+            "bgeedb",
+            "biomodels-parameter",
+            "bgee",
+            "pftools",
+            "selectome",
+            "myhits",
+            "biomodels",
+            "metanetx"
+        ],
+        "strict_count": 0,
+        "total_count": 10
+    },
+    "topic_0121": {
+        "strict_ids": [
+            "pftools"
+        ],
+        "total_ids": [
+            "pftools"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_3391": {
+        "strict_ids": [],
+        "total_ids": [
+            "pftools",
+            "labrat",
+            "bgee",
+            "metanetx"
+        ],
+        "strict_count": 0,
+        "total_count": 4
+    },
+    "topic_0160": {
+        "strict_ids": [
+            "pftools"
+        ],
+        "total_ids": [
+            "pftools"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_0166": {
+        "strict_ids": [
+            "pftools"
+        ],
+        "total_ids": [
+            "pftools"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_0078": {
+        "strict_ids": [
+            "myhits"
+        ],
+        "total_ids": [
+            "pftools",
+            "myhits"
+        ],
+        "strict_count": 1,
+        "total_count": 2
+    },
+    "topic_2814": {
+        "strict_ids": [],
+        "total_ids": [
+            "pftools",
+            "myhits"
+        ],
+        "strict_count": 0,
+        "total_count": 2
+    },
+    "topic_0081": {
+        "strict_ids": [],
+        "total_ids": [
+            "pftools",
+            "myhits"
+        ],
+        "strict_count": 0,
+        "total_count": 2
+    },
+    "topic_0736": {
+        "strict_ids": [
+            "pftools",
+            "myhits"
+        ],
+        "total_ids": [
+            "pftools",
+            "myhits"
+        ],
+        "strict_count": 2,
+        "total_count": 2
+    },
+    "topic_3292": {
+        "strict_ids": [
+            "metanetx"
+        ],
+        "total_ids": [
+            "metanetx"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_3070": {
+        "strict_ids": [],
+        "total_ids": [
+            "bgeecall",
+            "labrat",
+            "bgeedb",
+            "biomodels-parameter",
+            "bgee",
+            "selectome",
+            "biomodels",
+            "metanetx"
+        ],
+        "strict_count": 0,
+        "total_count": 8
+    },
+    "topic_3314": {
+        "strict_ids": [],
+        "total_ids": [
+            "metanetx"
+        ],
+        "strict_count": 0,
+        "total_count": 1
+    },
+    "topic_2258": {
+        "strict_ids": [
+            "metanetx"
+        ],
+        "total_ids": [
+            "metanetx"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_0605": {
+        "strict_ids": [],
+        "total_ids": [
+            "bgeedb",
+            "metanetx"
+        ],
+        "strict_count": 0,
+        "total_count": 2
+    },
+    "topic_2259": {
+        "strict_ids": [
+            "biomodels",
+            "biomodels-parameter",
+            "metanetx"
+        ],
+        "total_ids": [
+            "biomodels",
+            "biomodels-parameter",
+            "metanetx"
+        ],
+        "strict_count": 3,
+        "total_count": 3
+    },
+    "topic_3172": {
+        "strict_ids": [
+            "metanetx"
+        ],
+        "total_ids": [
+            "metanetx"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_0602": {
+        "strict_ids": [
+            "biomodels",
+            "biomodels-parameter",
+            "metanetx"
+        ],
+        "total_ids": [
+            "biomodels",
+            "biomodels-parameter",
+            "metanetx"
+        ],
+        "strict_count": 3,
+        "total_count": 3
+    },
+    "topic_3293": {
+        "strict_ids": [
+            "selectome"
+        ],
+        "total_ids": [
+            "selectome"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_3299": {
+        "strict_ids": [],
+        "total_ids": [
+            "selectome"
+        ],
+        "strict_count": 0,
+        "total_count": 1
+    },
+    "topic_0084": {
+        "strict_ids": [],
+        "total_ids": [
+            "selectome"
+        ],
+        "strict_count": 0,
+        "total_count": 1
+    },
+    "topic_0203": {
+        "strict_ids": [
+            "bgeedb",
+            "bgeecall",
+            "labrat"
+        ],
+        "total_ids": [
+            "bgeedb",
+            "bgeecall",
+            "labrat",
+            "bgee"
+        ],
+        "strict_count": 3,
+        "total_count": 4
+    },
+    "topic_3053": {
+        "strict_ids": [],
+        "total_ids": [
+            "bgeedb",
+            "bgeecall",
+            "labrat",
+            "bgee"
+        ],
+        "strict_count": 0,
+        "total_count": 4
+    },
+    "topic_3321": {
+        "strict_ids": [],
+        "total_ids": [
+            "bgeedb",
+            "bgeecall",
+            "labrat",
+            "bgee"
+        ],
+        "strict_count": 0,
+        "total_count": 4
+    },
+    "topic_0089": {
+        "strict_ids": [
+            "bgeedb"
+        ],
+        "total_ids": [
+            "bgeedb"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_0102": {
+        "strict_ids": [
+            "bgeedb"
+        ],
+        "total_ids": [
+            "bgeedb"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_3308": {
+        "strict_ids": [
+            "labrat",
+            "bgee"
+        ],
+        "total_ids": [
+            "labrat",
+            "bgee"
+        ],
+        "strict_count": 2,
+        "total_count": 2
+    },
+    "topic_0622": {
+        "strict_ids": [],
+        "total_ids": [
+            "labrat",
+            "bgee"
+        ],
+        "strict_count": 0,
+        "total_count": 2
+    },
+    "topic_0797": {
+        "strict_ids": [
+            "bgee"
+        ],
+        "total_ids": [
+            "bgee"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_0085": {
+        "strict_ids": [
+            "bgee"
+        ],
+        "total_ids": [
+            "bgee"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_1775": {
+        "strict_ids": [],
+        "total_ids": [
+            "bgee"
+        ],
+        "strict_count": 0,
+        "total_count": 1
+    },
+    "topic_3170": {
+        "strict_ids": [
+            "bgeecall",
+            "labrat"
+        ],
+        "total_ids": [
+            "bgeecall",
+            "labrat"
+        ],
+        "strict_count": 2,
+        "total_count": 2
+    },
+    "topic_3361": {
+        "strict_ids": [],
+        "total_ids": [
+            "bgeecall",
+            "labrat"
+        ],
+        "strict_count": 0,
+        "total_count": 2
+    },
+    "topic_3168": {
+        "strict_ids": [],
+        "total_ids": [
+            "bgeecall",
+            "labrat"
+        ],
+        "strict_count": 0,
+        "total_count": 2
+    },
+    "topic_3315": {
+        "strict_ids": [
+            "biomodels-parameter"
+        ],
+        "total_ids": [
+            "biomodels-parameter"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_3300": {
+        "strict_ids": [
+            "biomodels-parameter"
+        ],
+        "total_ids": [
+            "biomodels-parameter"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_3303": {
+        "strict_ids": [],
+        "total_ids": [
+            "biomodels-parameter",
+            "labrat"
+        ],
+        "strict_count": 0,
+        "total_count": 2
+    },
+    "topic_3068": {
+        "strict_ids": [
+            "biomodels-parameter"
+        ],
+        "total_ids": [
+            "biomodels-parameter"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_3512": {
+        "strict_ids": [
+            "labrat"
+        ],
+        "total_ids": [
+            "labrat"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    },
+    "topic_0114": {
+        "strict_ids": [],
+        "total_ids": [
+            "labrat"
+        ],
+        "strict_count": 0,
+        "total_count": 1
+    },
+    "topic_0077": {
+        "strict_ids": [],
+        "total_ids": [
+            "labrat"
+        ],
+        "strict_count": 0,
+        "total_count": 1
+    },
+    "topic_0099": {
+        "strict_ids": [],
+        "total_ids": [
+            "labrat"
+        ],
+        "strict_count": 0,
+        "total_count": 1
+    },
+    "topic_2640": {
+        "strict_ids": [
+            "labrat"
+        ],
+        "total_ids": [
+            "labrat"
+        ],
+        "strict_count": 1,
+        "total_count": 1
+    }
+}
