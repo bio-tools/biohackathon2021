@@ -8,17 +8,29 @@ library(stringr)
 # variable. Also importantly, the script does not store or report genders of
 # individual contributors, only aggregate statistics.
 
-tool <- fromJSON('https://bio.tools/api/tool/LimmaRP') # fetch bio.tools record
+# fetch bio.tools records
+tools <- read_json('https://bio.tools/api/tool/?topic=genomics&format=json&page=1')$list
 
-name <- tool$credit$name[2] # extract name
-
-firstName <- unlist(str_split(name, ' '))[1] # extract first name
-
-genderize <- fromJSON(paste('https://api.genderize.io/?name=', 
-                            firstName, sep=''))
+for(i in 2:10) {tools <- c(tools, read_json(
+              paste0('https://bio.tools/api/tool/?topic=genomics&format=json&page=',i))$list)
+}
 
 male <- 0
 female <- 0
 
-if(genderize$gender=='male' && genderize$probability>0.66) male=male+1
-if(genderize$gender=='female' && genderize$probability>0.66) female=female+1
+for(i in 1:length(tools)) {
+  if(length(tools[[i]]$credit)>0) {
+    name <- tools[[i]]$credit[[1]]$name
+    firstName <- unlist(str_split(name, ' '))[1] 
+    if(is.null(firstName) == FALSE) {
+      genderize <- fromJSON(paste('https://api.genderize.io/?name=', 
+                                firstName, sep=''))
+      if(genderize$gender=='male' && genderize$probability>0.66) male=male+1
+      if(genderize$gender=='female' && genderize$probability>0.66) female=female+1
+    }
+  }
+}
+
+# topic=metabolomics: 20.3% female (16 female, 63 male)
+# topic=proteomics: 11.8% female (10 female, 75 male)
+# topic-genomics: 19.5% female (16 female, 66 male)
