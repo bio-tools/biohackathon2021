@@ -11,7 +11,7 @@ from requests import Response
 
 def main():
     # Read the tools
-    with open("Resources/ProteomicsTools.json", "r", encoding="utf8") as f:
+    with open("Resources/ElectronMicroscopyTools.json", "r", encoding="utf8") as f:
         tools = json.load(f)
 
     calculate_statistics(raw_tools=tools)
@@ -31,8 +31,8 @@ def calculate_statistics(raw_tools: list):
     # Calculate the EDAM term statistics
     topic_stats = calculate_edam_topic_statistics(tools=tools)
 
-    #with open("Resources/ProteomicsTopics.json", "w") as f:
-    #    f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
+    with open("Resources/ElectronMicroscopyTopics.json", "w") as f:
+        f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
 
     # Convert to dataframe
     topic_stats_df: pd.DataFrame = pd.DataFrame.from_dict(topic_stats, orient="index")
@@ -55,14 +55,14 @@ def calculate_statistics(raw_tools: list):
 
     topic_stats_df = topic_stats_df.sort_values("Depth")
 
-    #topic_stats_df.to_excel("Resources/ProteomicsTopicsDf.xlsx")
+    topic_stats_df.to_excel("Resources/ElectronMicroscopyTopicsDf.xlsx")
 
     sns.set(rc={"figure.figsize": (10, 10)})
     g = sns.catplot(data=topic_stats_df, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
                     legend=False)
     plt.legend(loc='upper right')
     g.axes[0, 0].set_xlabel("Term and depth")
-    g.fig.suptitle("Terms for the Proteomics collection")
+    g.fig.suptitle("Terms for the Electron Microscopy collection")
     g.set_xticklabels(rotation=90)
     plt.show()
 
