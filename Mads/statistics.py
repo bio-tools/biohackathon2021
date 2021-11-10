@@ -8,7 +8,7 @@ from requests import Response
 
 def main():
     # Read the tools
-    with open("Resources/FullTools.json", "r", encoding="utf8") as f:
+    with open("Resources/SmallTools.json", "r", encoding="utf8") as f:
         tools = json.load(f)
 
     calculate_statistics(raw_tools=tools)
@@ -28,7 +28,7 @@ def calculate_statistics(raw_tools: list):
     # Calculate the EDAM term statistics
     topic_stats = calculate_edam_topic_statistics(tools=tools)
 
-    with open("Resources/FullTopics.json", "w") as f:
+    with open("Resources/SmallTopics.json", "w") as f:
         f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
 
 
@@ -42,7 +42,10 @@ def calculate_edam_topic_statistics(tools: list) -> dict:
     """
     # Create the dictionary to hold the topic statistics with the default fields.
     statistics = defaultdict(
-        lambda: {'strict_ids': set(), 'total_ids': set(), 'strict_count': 0, 'total_count': 0})
+        lambda: {"name": "", "depth": 0,
+                 "strict_ids": set(), "total_ids": set(),
+                 "strict_count": 0, "total_count": 0})
+
     # Get the index list
     index_list: dict = _get_index_list(term_type="topic")
 
@@ -93,8 +96,13 @@ def _add_terms(stats: dict, term: dict, tool_id: dict, index_list: dict) -> dict
     stats[term_id]["strict_ids"].add(tool_id)
     stats[term_id]["total_ids"].add(tool_id)
 
+    # Add topic name and depth if not added
+    stats = _add_term_info(stats=stats, term_id=term_id, index_list=index_list)
+
     # Go through the branches
     for branch_term in _get_branch_terms(term_id=term_id, term_index=index_list):
+        # Add topic name and depth if not added
+        stats = _add_term_info(stats=stats, term_id=branch_term, index_list=index_list)
         stats[branch_term]["total_ids"].add(tool_id)
 
     return stats
@@ -113,6 +121,22 @@ def _get_branch_terms(term_id: str, term_index: dict) -> list:
         for branch in term_index[term_id]["path"]:
             terms.extend(branch["key"].split("||"))
     return terms
+
+
+def _add_term_info(stats: dict, term_id: str, index_list: dict) -> dict:
+    """
+    Add term information, if none exists.
+
+    :param stats: The statistics dictionary.
+    :param term_id: The EDAM term.
+    :param index_list: The index list.
+    :return: The statistics dictionary.
+    """
+    if stats[term_id]["name"] == "":
+        stats[term_id]["name"] = index_list[term_id]["name"]
+        stats[term_id]["depth"] = len(index_list[term_id]["path"][0]["key"].split("||"))
+
+    return stats
 
 
 class SetEncoder(json.JSONEncoder):
