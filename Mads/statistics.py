@@ -65,6 +65,8 @@ def _create_topics_dataframe(topic_stats: dict, collection_folder_name: str, cut
 
     :param topic_stats: The topic statistics.
     :param collection_folder_name: The folder name for the collection.
+    :param cutoff_value: The cut-off for a term to be accepted.
+        # TODO: Should properly be a percentage of the total number of tools instead of an actual number.
     :return: The data frame with the topic statistics. One for the total and one for the reduced.
     """
     def transform_dataframe(dataframe: pd.DataFrame):
