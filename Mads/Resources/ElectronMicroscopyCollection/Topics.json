@@ -3,26 +3,26 @@
         "name": "Imaging",
         "depth": 2,
         "strict_ids": [
-            "mrc_image_processing_package",
             "eman",
+            "mrc_image_processing_package",
             "multifit"
         ],
         "total_ids": [
-            "xplore3d",
-            "chimera",
-            "scipion",
-            "ccp4",
-            "imagic",
-            "imod",
-            "ccpem",
             "eman",
             "multifit",
-            "xmipp",
+            "imagic",
+            "scipion",
+            "tom",
+            "ccp4",
+            "ccpem",
+            "imod",
             "mrc_image_processing_package",
             "2dx",
+            "xplore3d",
+            "chimera",
             "spider",
-            "frealign",
-            "tom"
+            "xmipp",
+            "frealign"
         ],
         "strict_count": 3,
         "total_count": 15
@@ -33,21 +33,21 @@
         "strict_ids": [],
         "total_ids": [
             "scipion_web_tools",
-            "xplore3d",
-            "chimera",
-            "scipion",
-            "ccp4",
-            "imagic",
-            "imod",
-            "ccpem",
             "eman",
             "multifit",
-            "xmipp",
+            "imagic",
+            "scipion",
+            "tom",
+            "ccp4",
+            "ccpem",
+            "imod",
             "mrc_image_processing_package",
             "2dx",
+            "xplore3d",
+            "chimera",
             "spider",
-            "frealign",
-            "tom"
+            "xmipp",
+            "frealign"
         ],
         "strict_count": 0,
         "total_count": 16
@@ -57,21 +57,21 @@
         "depth": 1,
         "strict_ids": [],
         "total_ids": [
-            "xplore3d",
-            "chimera",
-            "scipion",
-            "ccp4",
-            "imagic",
-            "imod",
-            "ccpem",
             "eman",
             "multifit",
-            "xmipp",
+            "imagic",
+            "scipion",
+            "tom",
+            "ccp4",
+            "ccpem",
+            "imod",
             "mrc_image_processing_package",
             "2dx",
+            "xplore3d",
+            "chimera",
             "spider",
-            "frealign",
-            "tom"
+            "xmipp",
+            "frealign"
         ],
         "strict_count": 0,
         "total_count": 15
@@ -80,34 +80,34 @@
         "name": "Electron microscopy",
         "depth": 3,
         "strict_ids": [
-            "xplore3d",
-            "chimera",
-            "scipion",
-            "imagic",
-            "imod",
-            "ccpem",
             "eman",
             "multifit",
-            "xmipp",
+            "imagic",
+            "scipion",
+            "tom",
+            "ccpem",
             "2dx",
+            "imod",
+            "xplore3d",
+            "chimera",
             "spider",
-            "frealign",
-            "tom"
+            "xmipp",
+            "frealign"
         ],
         "total_ids": [
-            "xplore3d",
-            "chimera",
-            "scipion",
-            "imagic",
-            "imod",
-            "ccpem",
             "eman",
             "multifit",
-            "xmipp",
+            "imagic",
+            "scipion",
+            "tom",
+            "ccpem",
             "2dx",
+            "imod",
+            "xplore3d",
+            "chimera",
             "spider",
-            "frealign",
-            "tom"
+            "xmipp",
+            "frealign"
         ],
         "strict_count": 13,
         "total_count": 13
@@ -117,21 +117,21 @@
         "depth": 1,
         "strict_ids": [],
         "total_ids": [
-            "xplore3d",
-            "chimera",
-            "scipion",
-            "ccp4",
-            "imagic",
-            "imod",
-            "ccpem",
             "eman",
             "multifit",
-            "xmipp",
+            "imagic",
+            "scipion",
+            "tom",
+            "ccp4",
+            "ccpem",
+            "imod",
             "mrc_image_processing_package",
             "2dx",
+            "xplore3d",
+            "chimera",
             "spider",
-            "frealign",
-            "tom"
+            "xmipp",
+            "frealign"
         ],
         "strict_count": 0,
         "total_count": 15
@@ -140,34 +140,34 @@
         "name": "Structural biology",
         "depth": 2,
         "strict_ids": [
-            "chimera",
-            "ccp4",
             "imagic",
-            "xmipp",
-            "2dx",
-            "imod",
-            "xplore3d",
+            "tom",
+            "ccp4",
             "mrc_image_processing_package",
+            "imod",
+            "2dx",
+            "xplore3d",
+            "chimera",
             "spider",
-            "frealign",
-            "tom"
+            "xmipp",
+            "frealign"
         ],
         "total_ids": [
-            "xplore3d",
-            "chimera",
-            "scipion",
-            "ccp4",
-            "imagic",
-            "imod",
-            "ccpem",
             "eman",
             "multifit",
-            "xmipp",
+            "imagic",
+            "scipion",
+            "tom",
+            "ccp4",
+            "ccpem",
+            "imod",
             "mrc_image_processing_package",
             "2dx",
+            "xplore3d",
+            "chimera",
             "spider",
-            "frealign",
-            "tom"
+            "xmipp",
+            "frealign"
         ],
         "strict_count": 11,
         "total_count": 15
@@ -179,10 +179,10 @@
             "eman"
         ],
         "total_ids": [
-            "scipion",
             "scipion_web_tools",
             "eman",
-            "multifit"
+            "multifit",
+            "scipion"
         ],
         "strict_count": 1,
         "total_count": 4
@@ -203,13 +203,13 @@
         "name": "Structure analysis",
         "depth": 2,
         "strict_ids": [
-            "scipion",
-            "scipion_web_tools"
+            "scipion_web_tools",
+            "scipion"
         ],
         "total_ids": [
-            "scipion",
             "scipion_web_tools",
-            "multifit"
+            "multifit",
+            "scipion"
         ],
         "strict_count": 2,
         "total_count": 3
@@ -306,12 +306,12 @@
         "name": "Data visualisation",
         "depth": 2,
         "strict_ids": [
-            "spider",
-            "xplore3d"
+            "xplore3d",
+            "spider"
         ],
         "total_ids": [
-            "spider",
-            "xplore3d"
+            "xplore3d",
+            "spider"
         ],
         "strict_count": 2,
         "total_count": 2
@@ -321,8 +321,8 @@
         "depth": 1,
         "strict_ids": [],
         "total_ids": [
-            "spider",
-            "xplore3d"
+            "xplore3d",
+            "spider"
         ],
         "strict_count": 0,
         "total_count": 2
@@ -367,12 +367,12 @@
         "name": "Tomography",
         "depth": 3,
         "strict_ids": [
-            "xmipp",
-            "xplore3d"
+            "xplore3d",
+            "xmipp"
         ],
         "total_ids": [
-            "xmipp",
-            "xplore3d"
+            "xplore3d",
+            "xmipp"
         ],
         "strict_count": 2,
         "total_count": 2
