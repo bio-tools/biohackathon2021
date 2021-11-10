@@ -48,7 +48,7 @@ pasting above link (or yours) in
 
 # Introduction
 
-With 20.000+ entries, bio.tools is a major registry of computational tools in the life sciences. During the [2020 European BioHackathon](https://biohackathon-europe.org/), the project "Making bio.tools fit for workflows" was run to  address two urgent needs of the platform:
+With 20.000+ entries, bio.tools is a major registry of computational tools in the life sciences. During the [2021 European BioHackathon](https://biohackathon-europe.org/), the project "Making bio.tools fit for workflows" was run to  address two urgent needs of the platform:
 
 1. Slicing the bio.tools content through specialisation and categorisation, to improve exposure to communities and to present useful content for the users. The main challenge is to summarise relevant information from the wealth of annotation categories in bio.tools and metrics from external sources. Therefore we aim to enrich tools, communities and collections with statistics and metrics that summarise functionality, impact and annotation quality. These metrics and statistics are valuable resources for tool-building communities, scientific domains, individual scientific tool repositories and groups specialising in technical features. With that information, we can identify, calculate and integrate metrics relevant for the bio.tools registry. In addition we will devise a mock-up / alpha version summary stats page within bio.tools.
 
