@@ -8,7 +8,7 @@ from requests import Response
 
 def main():
     # Read the tools
-    with open("Resources/SmallTools.json", "r", encoding="utf8") as f:
+    with open("Resources/FullTools.json", "r", encoding="utf8") as f:
         tools = json.load(f)
 
     calculate_statistics(raw_tools=tools)
@@ -28,7 +28,7 @@ def calculate_statistics(raw_tools: list):
     # Calculate the EDAM term statistics
     topic_stats = calculate_edam_topic_statistics(tools=tools)
 
-    with open("Resources/SmallTopics.json", "w") as f:
+    with open("Resources/FullTopics.json", "w") as f:
         f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
 
 
@@ -132,9 +132,10 @@ def _add_term_info(stats: dict, term_id: str, index_list: dict) -> dict:
     :param index_list: The index list.
     :return: The statistics dictionary.
     """
-    if stats[term_id]["name"] == "":
-        stats[term_id]["name"] = index_list[term_id]["name"]
-        stats[term_id]["depth"] = len(index_list[term_id]["path"][0]["key"].split("||"))
+    if term_id in index_list:
+        if stats[term_id]["name"] == "":
+            stats[term_id]["name"] = index_list[term_id]["name"]
+            stats[term_id]["depth"] = len(index_list[term_id]["path"][0]["key"].split("||"))
 
     return stats
 
