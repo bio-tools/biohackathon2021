@@ -139,8 +139,8 @@ for(i in 1:length(tools)) {
 
 tlds <- tld_extract(unlist(str_split(emails, "@")))$tld
 
-tlds[tlds == "edu"] <- "us"
-tlds[tlds == "gov"] <- "us"
+tlds[tlds == "edu"] <- "us" # assume .edu is US
+tlds[tlds == "gov"] <- "us" # assume .gov is US
 
 countries <- as.data.frame(table(tlds))
 
@@ -155,3 +155,6 @@ mapCountryData(countryMap, nameColumnToPlot='V2', catMethod = exp(seq(from=0,
                to=log(max(countryData[,2])+1), length.out=100)),
                addLegend = FALSE, 
                mapTitle ='bio.tools credits by country (topic = genomics')
+
+mapBubbles(countryMap, nameZSize="V2", nameZColour="GEO3major", addLegend=F, 
+           addColourLegend=F, colourPalette='rainbow', ylim=c(-10,67))
