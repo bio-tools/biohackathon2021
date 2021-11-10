@@ -39,11 +39,13 @@ def calculate_statistics(raw_tools: list, collection_name: str):
     # Create the collection folder
     collection_folder_name: str = f"{collection_name.title().replace(' ', '')}Collection"
 
-    with open(f"Resources/{collection_folder_name}/Topics.json", "w") as f:
-        f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
+    # with open(f"Resources/{collection_folder_name}/Topics.json", "w") as f:
+    #    f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
 
     topic_stats_df, reduced_topic_stats_df = _create_topics_dataframe(topic_stats, collection_folder_name,
-                                                                      cutoff_value=10)
+                                                                      cutoff_value=0, min_depth=2)
+
+    find_top_terms(reduced_topic_stats_df, collection_name=collection_name)
 
     _create_topics_statistics_plot(topic_stats_df=topic_stats_df, collection_name=collection_name)
     _create_partial_topics_statistics_plot(topic_stats_df=topic_stats_df, count_type="Total",
@@ -51,59 +53,47 @@ def calculate_statistics(raw_tools: list, collection_name: str):
     _create_partial_topics_statistics_plot(topic_stats_df=topic_stats_df, count_type="Strict",
                                            collection_name=collection_name)
 
-    _create_topics_statistics_plot(topic_stats_df=reduced_topic_stats_df, collection_name=collection_name)
+    _create_topics_statistics_plot(topic_stats_df=reduced_topic_stats_df, collection_name=collection_name,
+                                   min_cutoff=None, min_cutoff_unit="total", min_depth=2)
     _create_partial_topics_statistics_plot(topic_stats_df=reduced_topic_stats_df, count_type="Total",
-                                           collection_name=collection_name)
+                                           collection_name=collection_name, min_cutoff=None, min_cutoff_unit="Total",
+                                           min_depth=2)
     _create_partial_topics_statistics_plot(topic_stats_df=reduced_topic_stats_df, count_type="Strict",
-                                           collection_name=collection_name)
+                                           collection_name=collection_name, min_cutoff=None, min_cutoff_unit="Total",
+                                           min_depth=2)
 
 
-def _create_topics_dataframe(topic_stats: dict, collection_folder_name: str, cutoff_value: int) -> \
-        Tuple[pd.DataFrame, pd.DataFrame]:
+def find_top_terms(topic_df: pd.DataFrame, collection_name: str, top_n: int = 10, ):
     """
-    Create the dataframe for the topics.
+    Find the top number of topics.
 
-    :param topic_stats: The topic statistics.
-    :param collection_folder_name: The folder name for the collection.
-    :param cutoff_value: The cut-off for a term to be accepted.
-        # TODO: Should properly be a percentage of the total number of tools instead of an actual number.
-    :return: The data frame with the topic statistics. One for the total and one for the reduced.
+    :param topic_df: The number of topics.
+    :param collection_name: The collection name.
+    :param top_n: The top number of topics to be used.
     """
-    def transform_dataframe(dataframe: pd.DataFrame):
-        """
-        Transform the dataframe by combining columns, adding labels, and sorting the values according to the term depth.
+    topic_df_total: pd.DataFrame = topic_df[topic_df["Count Type"] == "Total"]
+    topic_df_strict: pd.DataFrame = topic_df[topic_df["Count Type"] == "Strict"]
+    topic_df_total = topic_df_total.sort_values("Count", ascending=False).head(n=top_n)
+    topic_df_strict = topic_df_strict.sort_values("Count", ascending=False).head(n=top_n)
 
-        :param dataframe: The data frame.
-        :return: The transformed data frame.
-        """
-        # Combine columns
-        dataframe = dataframe.melt(id_vars=["Term", "Term ID", "Depth"], value_vars=["Strict", "Total"],
-                                   var_name="Count Type", value_name="Count")
-        # Create the label for the figure
-        dataframe["Label"] = pd.Series(
-            [f"{term} ({depth})" for (term, depth) in zip(dataframe['Term'], dataframe['Depth'])])
-        dataframe = dataframe.sort_values("Depth")
-        return dataframe
+    print(topic_df_total)
+    print("*" * 5)
+    print(topic_df_strict)
 
-    df: pd.DataFrame = pd.DataFrame.from_dict(topic_stats, orient="index")
-    # Remove unused columns, rename columns and set term ID as column
-    del df["strict_ids"]
-    del df["total_ids"]
-    df.columns = ["Term", "Depth", "Strict", "Total"]
-    df["Term ID"] = df.index
-    # Remove terms, which was not found in the index list
-    df = df[df.Depth != -1]
-    df = df.reset_index()
-
-    df_reduced: pd.DataFrame = df[df["Total"] >= cutoff_value]
-
-    df = transform_dataframe(dataframe=df)
-    df_reduced = transform_dataframe(dataframe=df_reduced)
-
-    df.to_excel(f"Resources/{collection_folder_name}/TopicsDataframe.xlsx")
-    df_reduced.to_excel(f"Resources/{collection_folder_name}/TopicsDataframe_Reduced.xlsx")
-
-    return df, df_reduced
+    g = sns.catplot(data=topic_df_total, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
+                    legend=False)
+    g.set_xticklabels(rotation=90)
+    g.fig.suptitle(f"Top {top_n} topics in {collection_name} collection based on total terms")
+    g.axes[0, 0].set_xlabel("Term and depth")
+    plt.subplots_adjust(left=0.04, bottom=0.51, right=0.99, top=0.95)
+    plt.show()
+    g = sns.catplot(data=topic_df_strict, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
+                    legend=False)
+    g.set_xticklabels(rotation=90)
+    g.fig.suptitle(f"Top {top_n} topics in {collection_name} collection based on strict terms")
+    g.axes[0, 0].set_xlabel("Term and depth")
+    plt.subplots_adjust(left=0.04, bottom=0.51, right=0.99, top=0.95)
+    plt.show()
 
 
 def calculate_edam_topic_statistics(tools: list) -> dict:
@@ -220,35 +210,113 @@ def _add_term_info(stats: dict, term_id: str, index_list: dict) -> dict:
     return stats
 
 
-def _create_topics_statistics_plot(topic_stats_df: pd.DataFrame, collection_name: str):
+def _create_topics_dataframe(topic_stats: dict, collection_folder_name: str, cutoff_value: int, min_depth: int) -> \
+        Tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Create the dataframe for the topics.
+
+    :param topic_stats: The topic statistics.
+    :param collection_folder_name: The folder name for the collection.
+    :param cutoff_value: The cut-off for a term to be accepted.
+        # TODO: Should properly be a percentage of the total number of tools instead of an actual number.
+    :param min_depth: The minimum depth to use.
+    :return: The data frame with the topic statistics. One for the total and one for the reduced.
+    """
+
+    def transform_dataframe(dataframe: pd.DataFrame):
+        """
+        Transform the dataframe by combining columns, adding labels, and sorting the values according to the term depth.
+
+        :param dataframe: The data frame.
+        :return: The transformed data frame.
+        """
+        # Combine columns
+        dataframe = dataframe.melt(id_vars=["Term", "Term ID", "Depth"], value_vars=["Strict", "Total"],
+                                   var_name="Count Type", value_name="Count")
+        # Create the label for the figure
+        dataframe["Label"] = pd.Series(
+            [f"{term} ({depth})" for (term, depth) in zip(dataframe['Term'], dataframe['Depth'])])
+        dataframe = dataframe.sort_values("Depth")
+        return dataframe
+
+    df: pd.DataFrame = pd.DataFrame.from_dict(topic_stats, orient="index")
+    # Remove unused columns, rename columns and set term ID as column
+    del df["strict_ids"]
+    del df["total_ids"]
+    df.columns = ["Term", "Depth", "Strict", "Total"]
+    df["Term ID"] = df.index
+    # Remove terms, which was not found in the index list
+    df = df[df.Depth != -1]
+    df = df.reset_index()
+
+    df_reduced: pd.DataFrame = df[(df["Total"] >= cutoff_value) & (df["Depth"] >= min_depth)]
+
+    df = transform_dataframe(dataframe=df)
+    df_reduced = transform_dataframe(dataframe=df_reduced)
+
+    # df.to_excel(f"Resources/{collection_folder_name}/TopicsDataframe.xlsx")
+    # df_reduced.to_excel(f"Resources/{collection_folder_name}/TopicsDataframe_Reduced.xlsx")
+
+    return df, df_reduced
+
+
+def _create_topics_statistics_plot(topic_stats_df: pd.DataFrame, collection_name: str, min_cutoff: int = None,
+                                   min_cutoff_unit: str = None, min_depth: int = None):
     """
     Create statistics plot for the EDAM topics.
 
     :param topic_stats_df: The data frame with the statistics.
     :param collection_name: The collection name.
+    :param min_cutoff: The minimum cutoff value. Default None.
+    :param min_cutoff_unit: The minimum cutoff value unit. Default None.
+    :param min_depth: The minimum depth. Default None.
     """
     g = sns.catplot(data=topic_stats_df, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
                     legend=False)
     plt.legend(loc='upper right')
     g.axes[0, 0].set_xlabel("Term and depth")
-    g.fig.suptitle(f"Terms for the {collection_name} collection")
+    condition: str = ""
+    if min_cutoff is not None:
+        condition += f"Minimum {min_cutoff} {min_cutoff_unit} terms"
+    if min_cutoff is not None and min_depth is not None:
+        condition += " and "
+    if min_depth is not None:
+        condition += f"Minimum depth {min_depth}"
+    condition = f"({condition}) "
+    g.fig.suptitle(f"Terms {condition if len(condition) > 3 else ''}for the {collection_name} collection")
     g.set_xticklabels(rotation=90)
+    plt.subplots_adjust(left=0.04, bottom=0.57, right=0.99, top=0.95)
     plt.show()
 
 
-def _create_partial_topics_statistics_plot(topic_stats_df: pd.DataFrame, count_type: str, collection_name: str):
+def _create_partial_topics_statistics_plot(topic_stats_df: pd.DataFrame, count_type: str, collection_name: str,
+                                           min_cutoff: int = None, min_cutoff_unit: str = None, min_depth: int = None
+                                           ):
     """
     Create partial statistics plot for the EDAM topics for one count type only
 
     :param topic_stats_df: The data frame with the statistics.
     :param collection_name: The collection name.
+    :param min_cutoff: The minimum cutoff value. Default None.
+    :param min_cutoff_unit: The minimum cutoff value unit. Default None.
+    :param min_depth: The minimum depth. Default None.
     """
     topic_stats_df = topic_stats_df[topic_stats_df["Count Type"] == count_type]
     g = sns.catplot(data=topic_stats_df, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
                     legend=False)
     g.axes[0, 0].set_xlabel("Term and depth")
-    g.fig.suptitle(f"Terms for the {collection_name} collection with only {count_type.lower()} terms")
+    condition: str = ""
+    if min_cutoff is not None:
+        condition += f"Minimum {min_cutoff} {min_cutoff_unit} terms"
+    if min_cutoff is not None and min_depth is not None:
+        condition += " and "
+    if min_depth is not None:
+        condition += f"Minimum depth {min_depth}"
+    condition = f"({condition}) "
+    g.fig.suptitle(f"Terms {condition if len(condition) > 3 else ''}for the {collection_name} collection with only "
+                   f"{count_type.lower()} terms")
     g.set_xticklabels(rotation=90)
+    plt.subplots_adjust(left=0.04, bottom=0.51, right=0.99, top=0.95)
     plt.show()
 
 
