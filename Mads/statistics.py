@@ -1,17 +1,22 @@
+import matplotlib.pyplot as plt
+import pandas as pd
 import requests
 from boltons.iterutils import remap
 from collections import defaultdict
 import json
+import seaborn as sns
 
 from requests import Response
 
 
 def main():
     # Read the tools
-    with open("Resources/FullTools.json", "r", encoding="utf8") as f:
+    with open("Resources/SmallTools.json", "r", encoding="utf8") as f:
         tools = json.load(f)
 
     calculate_statistics(raw_tools=tools)
+
+
 
 
 def calculate_statistics(raw_tools: list):
@@ -28,8 +33,28 @@ def calculate_statistics(raw_tools: list):
     # Calculate the EDAM term statistics
     topic_stats = calculate_edam_topic_statistics(tools=tools)
 
-    with open("Resources/FullTopics.json", "w") as f:
-        f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
+    #with open("Resources/FullTopics.json", "w") as f:
+    #    f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
+
+    topic_stats_df: pd.DataFrame = pd.DataFrame.from_dict(topic_stats, orient="index")
+    del topic_stats_df["strict_ids"]
+    del topic_stats_df["total_ids"]
+
+    topic_stats_df.columns = ["Term", "Depth", "Strict", "Total"]
+    topic_stats_df["Term ID"] = topic_stats_df.index
+
+    topic_stats_df = topic_stats_df.melt(id_vars=["Term", "Term ID", "Depth"], value_vars=["Strict", "Total"],
+                                         var_name="Count Type", value_name="Count")
+    topic_stats_df = topic_stats_df.sort_values("Depth")
+    print(topic_stats_df)
+
+    topic_stats_df.to_excel("Resources/SmallTopicsDf.xlsx")
+
+    g = sns.catplot(data=topic_stats_df, x="Term", y="Count", hue="Count Type", ci=None, kind="bar", orient="v")
+    g.set_xticklabels(rotation=90)
+    plt.show()
+
+
 
 
 def calculate_edam_topic_statistics(tools: list) -> dict:
