@@ -12,6 +12,7 @@ from requests import Response
 
 
 def main():
+    plt.style.use("ggplot")
     # Read the tools
     collection_name: str = ""
     with open(f"Resources/{collection_name.title().replace(' ', '')}Collection/Tools.json", "r", encoding="utf8") as f:
