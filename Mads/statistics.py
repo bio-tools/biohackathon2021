@@ -1,4 +1,5 @@
 import os.path
+from typing import Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -13,7 +14,7 @@ from requests import Response
 
 def main():
     # Read the tools
-    collection_name: str = "Proteomics"
+    collection_name: str = ""
     with open(f"Resources/{collection_name.title().replace(' ', '')}Collection/Tools.json", "r", encoding="utf8") as f:
         tools = json.load(f)
 
@@ -38,13 +39,11 @@ def calculate_statistics(raw_tools: list, collection_name: str):
     # Create the collection folder
     collection_folder_name: str = f"{collection_name.title().replace(' ', '')}Collection"
 
-    if not os.path.exists(f"Resources/{collection_folder_name}"):
-        os.mkdir(f"Resources/{collection_folder_name}")
-
     with open(f"Resources/{collection_folder_name}/Topics.json", "w") as f:
         f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
 
-    topic_stats_df = _create_topics_dataframe(topic_stats, collection_folder_name)
+    topic_stats_df, reduced_topic_stats_df = _create_topics_dataframe(topic_stats, collection_folder_name,
+                                                                      cutoff_value=10)
 
     _create_topics_statistics_plot(topic_stats_df=topic_stats_df, collection_name=collection_name)
     _create_partial_topics_statistics_plot(topic_stats_df=topic_stats_df, count_type="Total",
@@ -52,15 +51,38 @@ def calculate_statistics(raw_tools: list, collection_name: str):
     _create_partial_topics_statistics_plot(topic_stats_df=topic_stats_df, count_type="Strict",
                                            collection_name=collection_name)
 
+    _create_topics_statistics_plot(topic_stats_df=reduced_topic_stats_df, collection_name=collection_name)
+    _create_partial_topics_statistics_plot(topic_stats_df=reduced_topic_stats_df, count_type="Total",
+                                           collection_name=collection_name)
+    _create_partial_topics_statistics_plot(topic_stats_df=reduced_topic_stats_df, count_type="Strict",
+                                           collection_name=collection_name)
 
-def _create_topics_dataframe(topic_stats: dict, collection_folder_name: str) -> pd.DataFrame:
+
+def _create_topics_dataframe(topic_stats: dict, collection_folder_name: str, cutoff_value: int) -> \
+        Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Create the dataframe for the topics.
 
     :param topic_stats: The topic statistics.
     :param collection_folder_name: The folder name for the collection.
-    :return: The data frame with the topic statistics.
+    :return: The data frame with the topic statistics. One for the total and one for the reduced.
     """
+    def transform_dataframe(dataframe: pd.DataFrame):
+        """
+        Transform the dataframe by combining columns, adding labels, and sorting the values according to the term depth.
+
+        :param dataframe: The data frame.
+        :return: The transformed data frame.
+        """
+        # Combine columns
+        dataframe = dataframe.melt(id_vars=["Term", "Term ID", "Depth"], value_vars=["Strict", "Total"],
+                                   var_name="Count Type", value_name="Count")
+        # Create the label for the figure
+        dataframe["Label"] = pd.Series(
+            [f"{term} ({depth})" for (term, depth) in zip(dataframe['Term'], dataframe['Depth'])])
+        dataframe = dataframe.sort_values("Depth")
+        return dataframe
+
     df: pd.DataFrame = pd.DataFrame.from_dict(topic_stats, orient="index")
     # Remove unused columns, rename columns and set term ID as column
     del df["strict_ids"]
@@ -70,14 +92,16 @@ def _create_topics_dataframe(topic_stats: dict, collection_folder_name: str) -> 
     # Remove terms, which was not found in the index list
     df = df[df.Depth != -1]
     df = df.reset_index()
-    # Combine columns
-    df = df.melt(id_vars=["Term", "Term ID", "Depth"], value_vars=["Strict", "Total"],
-                 var_name="Count Type", value_name="Count")
-    # Create the label for the figure
-    df["Label"] = pd.Series([f"{term} ({depth})" for (term, depth) in zip(df['Term'], df['Depth'])])
-    df = df.sort_values("Depth")
+
+    df_reduced: pd.DataFrame = df[df["Total"] >= cutoff_value]
+
+    df = transform_dataframe(dataframe=df)
+    df_reduced = transform_dataframe(dataframe=df_reduced)
+
     df.to_excel(f"Resources/{collection_folder_name}/TopicsDataframe.xlsx")
-    return df
+    df_reduced.to_excel(f"Resources/{collection_folder_name}/TopicsDataframe_Reduced.xlsx")
+
+    return df, df_reduced
 
 
 def calculate_edam_topic_statistics(tools: list) -> dict:
