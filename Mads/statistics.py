@@ -1,4 +1,3 @@
-import os.path
 from typing import Tuple
 
 import matplotlib.pyplot as plt
