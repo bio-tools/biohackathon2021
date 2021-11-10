@@ -4,6 +4,8 @@ library(ggplot2)
 library(forcats)
 library(ggsci)
 library(europepmc)
+library(urltools)
+library(rworldmap)
 
 # This is just a sandbox created during BioHackathon 2021
 
@@ -89,3 +91,67 @@ for(i in 1:length(pubs)) {
   titlesAbstracts <- paste0(titlesAbstracts, pubMedResults$title, pubMedResults$abstractText, '\n')
 }
 write.table(titlesAbstracts, "PubMed_proteomics.txt", row.names=F, col.names=F)
+
+
+count <- read_json('https://bio.tools/api/tool/?topic="genomics"&format=json')$count
+tools <- read_json('https://bio.tools/api/tool/?topic="genomics"&format=json&page=1')$list
+
+for(i in 2:round(0.5+count/10)) {tools <- c(tools, read_json(
+  paste0('https://bio.tools/api/tool/?topic="genomics"&format=json&page=',i))$list)
+}
+
+pubs <- c()
+for(i in 1:length(tools)) {
+  if(length(tools[[i]]$publication)>0) {
+    pmid <- tools[[i]]$publication[[1]]$pmid
+    pubs <- cbind(pubs, pmid)
+  }
+}
+
+# write.table(as.numeric(pubs), "genomics_pmids.txt", row.names=F, col.names=F)
+
+titlesAbstracts <- ''
+for(i in 1:length(pubs)) {
+  pubMedResults <- epmc_search(paste0(query = 'EXT_ID:', pubs[i], '&resultType=core'))
+  titlesAbstracts <- paste0(titlesAbstracts, pubMedResults$title, pubMedResults$abstractText, '\n')
+}
+write.table(titlesAbstracts, "PubMed_genomics.txt", row.names=F, col.names=F)
+
+
+# Example 3 - geographic
+
+count <- read_json('https://bio.tools/api/tool/?topic="genomics"&format=json')$count
+tools <- read_json('https://bio.tools/api/tool/?topic="genomics"&format=json&page=1')$list
+
+for(i in 2:round(0.5+count/10)) {tools <- c(tools, read_json(
+  paste0('https://bio.tools/api/tool/?topic="genomics"&format=json&page=',i))$list)
+}
+
+emails <- c()
+for(i in 1:length(tools)) {
+  if(length(tools[[i]]$credit)>0) {
+    if(length(tools[[i]]$credit[[1]]$email)>0) {
+      email <- tools[[i]]$credit[[1]]$email
+      emails <- cbind(emails, email)
+    }
+  }
+}
+
+tlds <- tld_extract(unlist(str_split(emails, "@")))$tld
+
+tlds[tlds == "edu"] <- "us"
+tlds[tlds == "gov"] <- "us"
+
+countries <- as.data.frame(table(tlds))
+
+total<-sum(countries$Freq)
+
+countryData <- as.data.frame(matrix(nrow=nrow(countries), ncol=2))
+countryData[,1] <- data.matrix(toupper(countries$tlds))
+countryData[,2] <- data.matrix(countries$Freq)
+countryMap<-joinCountryData2Map(countryData, joinCode="ISO2", nameJoinColumn="V1")
+
+mapCountryData(countryMap, nameColumnToPlot='V2', catMethod = exp(seq(from=0,
+               to=log(max(countryData[,2])+1), length.out=100)),
+               addLegend = FALSE, 
+               mapTitle ='bio.tools credits by country (topic = genomics')
