@@ -11,12 +11,10 @@ from requests import Response
 
 def main():
     # Read the tools
-    with open("Resources/SmallTools.json", "r", encoding="utf8") as f:
+    with open("Resources/ProteomicsTools.json", "r", encoding="utf8") as f:
         tools = json.load(f)
 
     calculate_statistics(raw_tools=tools)
-
-
 
 
 def calculate_statistics(raw_tools: list):
@@ -33,28 +31,40 @@ def calculate_statistics(raw_tools: list):
     # Calculate the EDAM term statistics
     topic_stats = calculate_edam_topic_statistics(tools=tools)
 
-    #with open("Resources/FullTopics.json", "w") as f:
+    #with open("Resources/ProteomicsTopics.json", "w") as f:
     #    f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
 
+    # Convert to dataframe
     topic_stats_df: pd.DataFrame = pd.DataFrame.from_dict(topic_stats, orient="index")
     del topic_stats_df["strict_ids"]
     del topic_stats_df["total_ids"]
 
     topic_stats_df.columns = ["Term", "Depth", "Strict", "Total"]
     topic_stats_df["Term ID"] = topic_stats_df.index
+    # Remove terms, which was not found in the index list
+    topic_stats_df = topic_stats_df[topic_stats_df.Depth != -1]
+    topic_stats_df = topic_stats_df.reset_index()
 
     topic_stats_df = topic_stats_df.melt(id_vars=["Term", "Term ID", "Depth"], value_vars=["Strict", "Total"],
                                          var_name="Count Type", value_name="Count")
+
+    topic_stats_df["Label"] = pd.Series([f"{term} ({depth})"
+                                         for (term, term_id, depth) in
+                                         zip(topic_stats_df['Term'], topic_stats_df['Term ID'], topic_stats_df['Depth'])
+                                         ])
+
     topic_stats_df = topic_stats_df.sort_values("Depth")
-    print(topic_stats_df)
 
-    topic_stats_df.to_excel("Resources/SmallTopicsDf.xlsx")
+    #topic_stats_df.to_excel("Resources/ProteomicsTopicsDf.xlsx")
 
-    g = sns.catplot(data=topic_stats_df, x="Term", y="Count", hue="Count Type", ci=None, kind="bar", orient="v")
+    sns.set(rc={"figure.figsize": (10, 10)})
+    g = sns.catplot(data=topic_stats_df, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
+                    legend=False)
+    plt.legend(loc='upper right')
+    g.axes[0, 0].set_xlabel("Term and depth")
+    g.fig.suptitle("Terms for the Proteomics collection")
     g.set_xticklabels(rotation=90)
     plt.show()
-
-
 
 
 def calculate_edam_topic_statistics(tools: list) -> dict:
@@ -67,7 +77,7 @@ def calculate_edam_topic_statistics(tools: list) -> dict:
     """
     # Create the dictionary to hold the topic statistics with the default fields.
     statistics = defaultdict(
-        lambda: {"name": "", "depth": 0,
+        lambda: {"name": "", "depth": -1,
                  "strict_ids": set(), "total_ids": set(),
                  "strict_count": 0, "total_count": 0})
 
@@ -160,7 +170,13 @@ def _add_term_info(stats: dict, term_id: str, index_list: dict) -> dict:
     if term_id in index_list:
         if stats[term_id]["name"] == "":
             stats[term_id]["name"] = index_list[term_id]["name"]
-            stats[term_id]["depth"] = len(index_list[term_id]["path"][0]["key"].split("||"))
+
+            path_depths: list = []
+            for path in index_list[term_id]["path"]:
+                path_depths.append(len(path["key"].split("||")))
+
+            # stats[term_id]["depth"] = len(index_list[term_id]["path"][0]["key"].split("||"))
+            stats[term_id]["depth"] = min(path_depths) - 1  # Ensure topic is depth 0 = Root
 
     return stats
 
