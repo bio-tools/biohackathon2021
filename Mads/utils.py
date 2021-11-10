@@ -2,7 +2,8 @@ import json
 
 import requests
 
-def main():
+
+def download_whole_biotools():
     url: str = "https://bio.tools/api/t/?format=json"
     tools: list = []
     next_page: str = ""
@@ -22,6 +23,23 @@ def main():
         f.write(json.dumps(tools))
 
 
+def get_certain_tools():
+    with open("Resources/FullTools.json", "r") as f:
+        tools = json.load(f)
+
+    with open("Resources/proteomics_domain.txt", "r") as f:
+        tools_ids = [tool_id.lower().strip() for tool_id in f.readlines()]
+    tool_collection = [tool for tool in tools if tool["biotoolsID"].lower() in tools_ids]
+
+    with open("Resources/ProteomicsTools.json", "w") as f:
+        f.write(json.dumps(tool_collection))
+
+
+
+def main():
+    get_certain_tools()
+
+
 if __name__ == "__main__":
-    # main()
+    main()
     pass
