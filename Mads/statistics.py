@@ -1,3 +1,5 @@
+import os.path
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import requests
@@ -11,17 +13,19 @@ from requests import Response
 
 def main():
     # Read the tools
-    with open("Resources/ElectronMicroscopyTools.json", "r", encoding="utf8") as f:
+    collection_name: str = "Proteomics"
+    with open(f"Resources/{collection_name.title().replace(' ', '')}Collection/Tools.json", "r", encoding="utf8") as f:
         tools = json.load(f)
 
-    calculate_statistics(raw_tools=tools)
+    calculate_statistics(raw_tools=tools, collection_name=collection_name)
 
 
-def calculate_statistics(raw_tools: list):
+def calculate_statistics(raw_tools: list, collection_name: str):
     """
     Calculate the statistics (Main function).
 
     :param raw_tools: The raw list of tools.
+    :param collection_name: The name of the collection.
     :return:
     """
     # Clean the list
@@ -31,40 +35,49 @@ def calculate_statistics(raw_tools: list):
     # Calculate the EDAM term statistics
     topic_stats = calculate_edam_topic_statistics(tools=tools)
 
-    with open("Resources/ElectronMicroscopyTopics.json", "w") as f:
+    # Create the collection folder
+    collection_folder_name: str = f"{collection_name.title().replace(' ', '')}Collection"
+
+    if not os.path.exists(f"Resources/{collection_folder_name}"):
+        os.mkdir(f"Resources/{collection_folder_name}")
+
+    with open(f"Resources/{collection_folder_name}/Topics.json", "w") as f:
         f.write(json.dumps(topic_stats, indent=4, cls=SetEncoder))
 
-    # Convert to dataframe
-    topic_stats_df: pd.DataFrame = pd.DataFrame.from_dict(topic_stats, orient="index")
-    del topic_stats_df["strict_ids"]
-    del topic_stats_df["total_ids"]
+    topic_stats_df = _create_topics_dataframe(topic_stats, collection_folder_name)
 
-    topic_stats_df.columns = ["Term", "Depth", "Strict", "Total"]
-    topic_stats_df["Term ID"] = topic_stats_df.index
+    _create_topics_statistics_plot(topic_stats_df=topic_stats_df, collection_name=collection_name)
+    _create_partial_topics_statistics_plot(topic_stats_df=topic_stats_df, count_type="Total",
+                                           collection_name=collection_name)
+    _create_partial_topics_statistics_plot(topic_stats_df=topic_stats_df, count_type="Strict",
+                                           collection_name=collection_name)
+
+
+def _create_topics_dataframe(topic_stats: dict, collection_folder_name: str) -> pd.DataFrame:
+    """
+    Create the dataframe for the topics.
+
+    :param topic_stats: The topic statistics.
+    :param collection_folder_name: The folder name for the collection.
+    :return: The data frame with the topic statistics.
+    """
+    df: pd.DataFrame = pd.DataFrame.from_dict(topic_stats, orient="index")
+    # Remove unused columns, rename columns and set term ID as column
+    del df["strict_ids"]
+    del df["total_ids"]
+    df.columns = ["Term", "Depth", "Strict", "Total"]
+    df["Term ID"] = df.index
     # Remove terms, which was not found in the index list
-    topic_stats_df = topic_stats_df[topic_stats_df.Depth != -1]
-    topic_stats_df = topic_stats_df.reset_index()
-
-    topic_stats_df = topic_stats_df.melt(id_vars=["Term", "Term ID", "Depth"], value_vars=["Strict", "Total"],
-                                         var_name="Count Type", value_name="Count")
-
-    topic_stats_df["Label"] = pd.Series([f"{term} ({depth})"
-                                         for (term, term_id, depth) in
-                                         zip(topic_stats_df['Term'], topic_stats_df['Term ID'], topic_stats_df['Depth'])
-                                         ])
-
-    topic_stats_df = topic_stats_df.sort_values("Depth")
-
-    topic_stats_df.to_excel("Resources/ElectronMicroscopyTopicsDf.xlsx")
-
-    sns.set(rc={"figure.figsize": (10, 10)})
-    g = sns.catplot(data=topic_stats_df, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
-                    legend=False)
-    plt.legend(loc='upper right')
-    g.axes[0, 0].set_xlabel("Term and depth")
-    g.fig.suptitle("Terms for the Electron Microscopy collection")
-    g.set_xticklabels(rotation=90)
-    plt.show()
+    df = df[df.Depth != -1]
+    df = df.reset_index()
+    # Combine columns
+    df = df.melt(id_vars=["Term", "Term ID", "Depth"], value_vars=["Strict", "Total"],
+                 var_name="Count Type", value_name="Count")
+    # Create the label for the figure
+    df["Label"] = pd.Series([f"{term} ({depth})" for (term, depth) in zip(df['Term'], df['Depth'])])
+    df = df.sort_values("Depth")
+    df.to_excel(f"Resources/{collection_folder_name}/TopicsDataframe.xlsx")
+    return df
 
 
 def calculate_edam_topic_statistics(tools: list) -> dict:
@@ -100,7 +113,7 @@ def calculate_edam_topic_statistics(tools: list) -> dict:
 
 def _get_index_list(term_type: str):
     """
-    Get the index list
+    Get the index list.
 
     :param term_type: The EDAM term type.
     :return: The index list.
@@ -179,6 +192,38 @@ def _add_term_info(stats: dict, term_id: str, index_list: dict) -> dict:
             stats[term_id]["depth"] = min(path_depths) - 1  # Ensure topic is depth 0 = Root
 
     return stats
+
+
+def _create_topics_statistics_plot(topic_stats_df: pd.DataFrame, collection_name: str):
+    """
+    Create statistics plot for the EDAM topics.
+
+    :param topic_stats_df: The data frame with the statistics.
+    :param collection_name: The collection name.
+    """
+    g = sns.catplot(data=topic_stats_df, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
+                    legend=False)
+    plt.legend(loc='upper right')
+    g.axes[0, 0].set_xlabel("Term and depth")
+    g.fig.suptitle(f"Terms for the {collection_name} collection")
+    g.set_xticklabels(rotation=90)
+    plt.show()
+
+
+def _create_partial_topics_statistics_plot(topic_stats_df: pd.DataFrame, count_type: str, collection_name: str):
+    """
+    Create partial statistics plot for the EDAM topics for one count type only
+
+    :param topic_stats_df: The data frame with the statistics.
+    :param collection_name: The collection name.
+    """
+    topic_stats_df = topic_stats_df[topic_stats_df["Count Type"] == count_type]
+    g = sns.catplot(data=topic_stats_df, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
+                    legend=False)
+    g.axes[0, 0].set_xlabel("Term and depth")
+    g.fig.suptitle(f"Terms for the {collection_name} collection with only {count_type.lower()} terms")
+    g.set_xticklabels(rotation=90)
+    plt.show()
 
 
 class SetEncoder(json.JSONEncoder):
