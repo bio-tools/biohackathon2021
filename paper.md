@@ -66,9 +66,31 @@ In this document we document the progress towards these goals that was made duri
 
 ## bio.tools Annotation Quality
 
-(please add content here)
+In order to asses the quality of bio.tools annotation, we have decided to distinguish few different aspects of evaluation:
 
-## ...
+#### Availability of inputs/outputs
+
+One of the straight-forward criteria for accessing the quality of annotation is distinguishing tools that include input/output pairs, and those that do not. We observe that ~7,6% (1721/22540) of the tools provide the input/output annotations with both, data type and format specified, while the others lack at least one of the mentioned annotations. In addition, we can see that the percentage changes within different domains,/topics, which does not come as a surprise. Where the domains such as 'proteomics' include ~36,4% (273/751) of the fully annotated tools, with respect to the input/output annotations.
+
+(to add figure)
+
+#### "IO concreteness" - specialisation of input/output annotation terms (this name is a placeholder)
+
+When looking at tools that have annotated inputs and outputs, we try to asses the "IO concreteness" of tool annotations by evaluating how specific the terms used to specify the inputs and outputs are, i.e., whether the terms are abstract classes - low "IO concreteness", or concrete concepts (usually leaves) - high "IO concreteness". We noticed that overall "IO concreteness" of inputs is slightly higher than the outputs, i,e., the terms used for input annotations are more specific/concrete than the terms used for output. Furthermore, the **data formats** of both, inputs and outputs, have higher "IO concreteness" than **data types**. As a matter of fact over 20% of the input/output annotations are annotated as **Data**, which is the root term of the corresponding taxonomy. 
+
+(to add figure maybe)
+
+### bio.tools Automated Annotation Improvement
+
+The results of the evaluation of the "IO concreteness" of bio.tools suggest that there is space for improvement when to comes to **data types** annotations of the operation inputs/outputs.
+
+We use existing EDAM object properties to attempt to automatically improve the corresponding bio.tools annotations. We identify three key object properties, as follows:
+- **is_format_of** - defines dependency between data *formats* and corresponding data *types*
+- **has_input** - defines dependency between *operation* and corresponding data *type* inputs
+- **has_output** -  defines dependency between operation and corresponding data *type* outputs
+
+We focus on the **is_format_of** as part of the preliminary approach, with plan to extend it to all 3 concepts. The results show that out of 1721 operations, there are 443 inputs and outputs, where data type suggested by EDAM ontology (based on the given format and *is_format_of* object property) is more concrete than the one annotated in bio.tools (see [file](http://https://github.com/bio-tools/biohackathon2021/blob/main/JavaVedran/biotoolsAnnotations/res/Results/toolAnnotationFullBioTools_suggestions.csv "file")). When looking at the *proteomics* domain, there are 16 inputs and outputs (out of 273 operations) where data type suggested by EDAM ontology (based on the given format and *is_format_of* object property) is more concrete than the one annotated in bio.tools (see [file](https://github.com/bio-tools/biohackathon2021/blob/main/JavaVedran/biotoolsAnnotations/res/Results/toolAnnotationProteomics_suggestions.csv "file")). 
+
 
 ## Use Case: The Cascabel Pipeline
 
