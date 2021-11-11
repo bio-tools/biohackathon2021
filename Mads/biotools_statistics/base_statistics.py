@@ -12,15 +12,15 @@ def calculate_collection_statistics(tools: dict) -> dict:
     stats: Dict[str, Union[int, Dict[str, int]]] = {}
     stats["toolCount"] = len(tools)
 
-    stats["hasToolType"] = len([tool for tool in tools if len(tool["toolType"]) > 0])
-    stats["toolTypeCount"] = sum([len(tool["toolType"]) for tool in tools])
+    stats["hasToolType"] = len([tool for tool in tools if "toolType" in tool])
+    stats["toolTypeCount"] = sum([len(tool["toolType"]) for tool in tools if "toolType" in tool])
     stats["toolTypes"] = calculate_tool_type_statistics(tools=tools)
 
     stats["hasTopic"] = len([tool for tool in tools if len(tool["topic"]) > 0])
     stats["topicCount"] = sum([len(tool["topic"]) for tool in tools])
 
-    stats["hasOperatingSystem"] = len([tool for tool in tools if len(tool["operatingSystem"]) > 0])
-    stats["operatingSystemCount"] = sum([len(tool["operatingSystem"]) for tool in tools])
+    stats["hasOperatingSystem"] = len([tool for tool in tools if "operatingSystem" in tool])
+    stats["operatingSystemCount"] = sum([len(tool["operatingSystem"]) for tool in tools if "operatingSystem" in tool])
     stats["operatingSystem"] = calculate_os_statistics(tools=tools)
 
     stats["hasLanguage"] = len([tool for tool in tools if "language" in tool])
@@ -45,8 +45,8 @@ def calculate_collection_statistics(tools: dict) -> dict:
     stats["hasPublications"] = len([tool for tool in tools if "publication" in tool])
     stats["publicationCount"] = sum([len(tool["publication"]) for tool in tools if "publication" in tool])
 
-    stats["hasCredit"] = len([tool for tool in tools if len(tool["credit"]) > 0])
-    stats["creditCount"] = sum([len(tool["credit"]) for tool in tools])
+    stats["hasCredit"] = len([tool for tool in tools if "credit" in tool])
+    stats["creditCount"] = sum([len(tool["credit"]) for tool in tools if "credit" in tool])
 
     stats["hasCommunity"] = len([tool for tool in tools if "community" in tool])
     stats["communityCount"] = sum([len(tool["community"]) for tool in tools if "community" in tool])
@@ -85,10 +85,10 @@ def calculate_tool_type_statistics(tools: dict) -> dict:
     """
     TOOL_TYPES: List[str] = ["Bioinformatics portal", "Command-line tool", "Database portal", "Desktop application",
                              "Library", "Ontology", "Plug-in", "Script", "SPARQL endpoint", "Suite", "Web application",
-                             "Web API ", "Web service", "Workbench", "Workflow"]
+                             "Web API", "Web service", "Workbench", "Workflow"]
     tool_type_stats: Dict[str, int] = {key: 0 for key in TOOL_TYPES}
 
-    for tool_types in [tool["toolType"] for tool in tools]:
+    for tool_types in [tool["toolType"] for tool in tools if "toolType" in tool]:
         for tool_type in tool_types:
             tool_type_stats[tool_type] += 1
 
