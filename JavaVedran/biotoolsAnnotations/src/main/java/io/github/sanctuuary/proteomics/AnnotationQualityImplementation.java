@@ -39,7 +39,7 @@ public class AnnotationQualityImplementation {
 		List<String> toolAnnotationsDomain = Arrays.asList("toolAnnotationFullBioTools", "toolAnnotationMetabolomics",
 				"toolAnnotationProteomics", "toolAnnotationOriginal");
 
-		for (String toolsName : Utils.getElements(toolAnnotationsDomain, 1)) {
+		for (String toolsName : Utils.getElements(toolAnnotationsDomain, 2)) {
 			toolAnnotations = toolAnnotationDirPath + toolsName + ".json";
 			resultsDir = resultsDirPath + toolsName;
 		}
