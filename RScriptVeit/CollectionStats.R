@@ -53,10 +53,11 @@ rciteCount <- sapply(pubMedResults, function(x) x$citedByCount)
 
 
 ################## Here we define the use cases ############
-usecase <- "https://bio.tools/api/t?topic='Metabolomics'&format=json"
+#usecase <- "https://bio.tools/api/t?topic='Metabolomics'&format=json"
 #usecase <- "https://bio.tools/api/t?topic='Proteomics'&format=json"
 #usecase <- "https://bio.tools/api/t?topic='RNA-Seq'&format=json"
 #usecase <- "https://bio.tools/api/t?q=cryo-em&format=json"
+usecase <- "https://bio.tools/api/t?q=disordered&format=json"
 
 ## Use case using call above
 A <- read_json(paste0(usecase, "&page=1"))
