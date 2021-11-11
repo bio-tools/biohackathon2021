@@ -81,11 +81,33 @@ as well as between _input_ and _output_ formats:
 
 #### Other terms
 
+We can monitor statistics on tool type, operation system and license
+
+![](Figures/ProteomicsOtherTerms.png)
+
 #### Metrics
+
+Availability of code monitored by OpenEBench:
+
+![](Figures/ProtemicsOpenSource.png)
+
+More stats from Europe PMC, counting citations of the main publications of the tools
+
+![](Figures/ProteomicsCitations.png)
+
+Here, red is the distribution of about 50% of all bio.tools tools, grey the publications of proteomics tools.
+
 
 ## bio.tools Annotation Quality
 
 In order to asses the quality of bio.tools annotation, we have decided to distinguish few different aspects of evaluation:
+
+How well are the tools annotated in comparison with all annotations in bio.tools (red: proteomics tools, grey: all):
+
+![](Figures/ProteomicsAnnotationQuality.png)
+
+In general, proteomics have more EDAM annotations (also counts for _Data_ and _Format_).
+
 
 #### Availability of inputs/outputs
 
