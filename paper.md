@@ -77,6 +77,7 @@ Differences between _input_ and _output_ data:
 
 as well as between _input_ and _output_ formats:
 
+![](Figures/ProteomicsFormat.png)
 
 #### Other terms
 
