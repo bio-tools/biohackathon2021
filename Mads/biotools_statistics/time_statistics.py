@@ -1,3 +1,8 @@
+"""
+Functions to calculate different time-dependent statistics.
+
+"""
+
 from collections import defaultdict
 import datetime
 import pandas as pd
