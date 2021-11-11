@@ -71,6 +71,14 @@ General trends and properties within a tool collection. The main use case discus
 
 Word clouds provide an overview of the different terms and their frequency.
 
+Differences between _input_ and _output_ data:
+
+![](Figures/ProteomicsData.png)
+
+as well as between _input_ and _output_ formats:
+
+![](Figures/ProteomicsFormat.png)
+
 #### Other terms
 
 #### Metrics
