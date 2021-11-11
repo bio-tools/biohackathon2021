@@ -11,13 +11,13 @@ authors:
   - name: Anna-Lena Lamprecht
     orcid: 0000-0003-1953-5606
     affiliation: 1
-  - name: another author
-    orcid: 0000-0000-0000-0000
+  - name: Veit Schwämmle
+    orcid: 0000-0002-9708-6722
     affiliation: 2
 affiliations:
   - name: Dept. of Information and Computing Sciences, Utrecht University, Netherlands
     index: 1
-  - name: another affiliation
+  - name: Dept. of Biochemistry and Molecular Biology, University of Southern Denmark, Denmark
     index: 2
 date: 9 November 2021
 bibliography: paper.bib
