@@ -13,7 +13,7 @@ def clean_tools_list(tools_list):
     drop_false = lambda path, key, value: bool(value)
     return [remap(tool, visit=drop_false) for tool in tools_list]
 
-def has_data_with_format(tool):
+def has_data_with_format(tool): 
     for f in tool.get('function',[]):
         for i in f.get('input',[]):
             if i.get('data') and i['data']['uri'].lower() == 'http://edamontology.org/data_0006' and i.get('format'):
