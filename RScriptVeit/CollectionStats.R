@@ -53,8 +53,8 @@ rciteCount <- sapply(pubMedResults, function(x) x$citedByCount)
 
 
 ################## Here we define the use cases ############
-#usecase <- "https://bio.tools/api/t?topic='Metabolomics'&format=json"
-usecase <- "https://bio.tools/api/t?topic='Proteomics'&format=json"
+usecase <- "https://bio.tools/api/t?topic='Metabolomics'&format=json"
+#usecase <- "https://bio.tools/api/t?topic='Proteomics'&format=json"
 #usecase <- "https://bio.tools/api/t?topic='RNA-Seq'&format=json"
 #usecase <- "https://bio.tools/api/t?q=cryo-em&format=json"
 
@@ -133,7 +133,7 @@ simpleStats <- function(collection, title, rand=NULL) {
   
   my_graph <- wordcloud2(edam_stats, size=0.4, shape="pentagon")
   my_graph
-  saveWidget(my_graph,"tmp.html",selfcontained = F)
+  saveWidget(my_graph,"tmp.html",selfcontained = F, title=title)
   webshot2::webshot("tmp.html",file = paste0(title," wordcloud.pdf"), delay =20, vwidth = 1000, vheight=1000)
   
   
@@ -209,9 +209,10 @@ citeCount <- sapply(pubMedResults, function(x) x$citedByCount)
 x <- hist(citeCount, 0:max(citeCount), main=paste("Citations"), xlab="Citations", probability = T)
 y <- hist(rciteCount, 0:max(rciteCount), main=paste("Citations"), xlab="Citations", plot=F, probability = T)
 plot(y$mids, y$density, log="xy", type="l", main=paste("log-log plot of citation count"), 
-     xlab="Citations", ylab="Counts", col="#AA5533")
-lines(x$mids, x$density, log="xy", type="l",col="#33333355", add=T)
+     xlab="Citations", ylab="Counts", col="#33333355")
+lines(x$mids, x$density, log="xy", type="l",col="#AA5533", add=T)
 text(10,10,sum(citeCount))
+lines(x, 3*x^-1.8)
 
 #write.table(titlesAbstracts, "PubMed_genomics.txt", row.names=F, col.names=F)
 
@@ -223,13 +224,12 @@ for (i in sapply(AllTools, function(x) x$biotoolsID)) {
   metrics[[i]] <- read_json(paste0("https://openebench.bsc.es/monitor/metrics/", tolower(i)))
 }
 length(metrics)
-hist(sapply(metrics, function(x) x$project$website$operational), 100, main="Uptime?")
 barplot(table(as.numeric(sapply(metrics, function(x) x$project$website$https))),  main="Is https page")
-hist(sapply(metrics, function(x) x$project$website$operational), 100, main="")
+hist(sapply(metrics, function(x) x$project$website$operational), 100, main="Operational web page", xlab="")
 
 sourcecode <- lapply(metrics, function(x) if (!is.null(x$distribution$sourcecode)) names(which(unlist(x$distribution$sourcecode))))
-barplot(table(unlist(sourcecode)), las=2)
+barplot(table(unlist(sourcecode)), las=2, main="Source code")
 
 issuetracker <- lapply(metrics, function(x) if (!is.null(x$support) & all(is.logical(unlist(x$support)))) names(which(unlist(x$support))))
-barplot(table(unlist(issuetracker)), las=2)
+barplot(table(unlist(issuetracker)), las=2, main="Issue tracker")
 
