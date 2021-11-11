@@ -64,6 +64,17 @@ In this document we document the progress towards these goals that was made duri
 
 (please add content here)
 
+### General statistics on bio.tools collections
+General trends and properties within a tool collection. The main use case discussed here consists of the tools withe an EDAM topic _Proteomics_. 
+
+#### EDAM
+
+Word clouds provide an overview of the different terms and their frequency.
+
+#### Other terms
+
+#### Metrics
+
 ## bio.tools Annotation Quality
 
 In order to asses the quality of bio.tools annotation, we have decided to distinguish few different aspects of evaluation:
