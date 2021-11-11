@@ -1,12 +1,12 @@
-import datetime
 import json
-from collections import defaultdict
 
 from boltons.iterutils import remap
 from matplotlib import pyplot as plt
 import matplotlib.dates as mdates
 import pandas as pd
 import seaborn as sns
+
+from biotools_statistics import calculate_total_entries_over_time
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
 
 def calculate_statistics(raw_tools: list, collection_name: str, ):
     """
-        Calculate the statistics (Main function).
+        Calculate the statistics.
 
         :param raw_tools: The raw list of tools.
         :param collection_name: The name of the collection.
@@ -31,30 +31,8 @@ def calculate_statistics(raw_tools: list, collection_name: str, ):
     drop_false = lambda path, key, value: bool(value)
     tools = remap(raw_tools, visit=drop_false)
 
-    stats_dict: dict = calculate_total_entries_per_time(tools=tools)
+    stats_dict: dict = calculate_total_entries_over_time(tools=tools)
     _create_total_entries_plot(stats_dict=stats_dict, collection_name=collection_name)
-
-
-def calculate_total_entries_per_time(tools: list):
-    """
-    Calculate the total entries over time.
-    :param tools: The raw list of tools.
-    :return: The statistics dictionary.
-    """
-
-    tool_time: dict = {tool["biotoolsID"]: datetime.datetime.fromisoformat(tool["additionDate"].split("T")[0]).date()
-                       for tool in tools}
-
-    tool_time_df: pd.DataFrame = pd.DataFrame.from_dict(data=tool_time, orient="index")
-    tool_time_df = tool_time_df.reset_index()
-    tool_time_df.columns = ["ID", "AdditionDate"]
-
-    stats_dict: defaultdict = defaultdict(lambda: {"count": 0})
-
-    for date in daterange(start_date=min(tool_time_df["AdditionDate"]), end_date=max(tool_time_df["AdditionDate"])):
-        stats_dict[date] = len(tool_time_df[(tool_time_df["AdditionDate"] <= date)])
-
-    return stats_dict
 
 
 def _create_total_entries_plot(stats_dict, collection_name):
@@ -74,18 +52,6 @@ def _create_total_entries_plot(stats_dict, collection_name):
     ax.set_xlim(xmin=min(stats_df.index), xmax=max(stats_df.index))
     fig.autofmt_xdate()
     plt.show()
-
-
-def daterange(start_date, end_date):
-    """
-    Helper methods for iterating through the dates (Modified from https://stackoverflow.com/a/1060330).
-
-    :param start_date: The start date.
-    :param end_date: The end date (modified to be inclusive instead of exclusive).
-    :return: The generator.
-    """
-    for n in range(int((end_date - start_date).days) + 1):
-        yield start_date + datetime.timedelta(n)
 
 
 if __name__ == "__main__":
