@@ -2,6 +2,11 @@ package io.github.sanctuuary.proteomics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import nl.uu.cs.ape.sat.models.AllPredicates;
+import nl.uu.cs.ape.sat.models.AllTypes;
 
 public class Utils {
 
@@ -32,5 +37,24 @@ public class Utils {
 			elements.add(list.get(index - 1));
 		}
 		return elements;
+	}
+	
+	/**
+	 * Print the elements of the hash map according to the set of tools.
+	 * @param dataTypeFormatDependencies
+	 * @param allPredicates1 
+	 * @param allPredicates2
+	 */
+	public static void printStringMap(Map<String, Set<String>> dataTypeFormatDependencies, AllPredicates allPredicates1, AllPredicates allPredicates2) {
+		
+		
+		for(String formatID : dataTypeFormatDependencies.keySet()) {
+			System.out.println(allPredicates1.get(formatID) + " ->");
+			dataTypeFormatDependencies.get(formatID).forEach(dataID -> System.out.println(allPredicates2.get(dataID) + " "));
+			System.out.println("_____________________");
+		}
+		
+//		System.out.println("Number of formats annotated: " + dataTypeFormatDependencies.keySet().size());
+		
 	}
 }

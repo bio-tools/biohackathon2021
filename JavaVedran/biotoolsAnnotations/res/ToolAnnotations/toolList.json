@@ -18,4 +18,7 @@
 	,"biotools:raxml"
 	,"biotools:fasttree"
 	,"biotools:krona"
+	,"biotools:ChannelsDB"
+	,"biotools:pyDockSAXS"
 ]
+

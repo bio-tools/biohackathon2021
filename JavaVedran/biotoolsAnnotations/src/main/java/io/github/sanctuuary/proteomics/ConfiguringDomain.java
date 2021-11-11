@@ -37,7 +37,7 @@ public class ConfiguringDomain {
 		APEUtils.write2file(bioToolsRAW.toString(), new File(Utils.TOOLS_DIR + Utils.TOOLS_PREFIX + toolType + "RAW.json"), false);
 		
 		JSONObject apeToolAnnotation = BioToolsAPI.convertBioTools2ApeAnnotation(bioToolsRAW);
-		APEUtils.write2file(apeToolAnnotation.toString(), new File(Utils.TOOLS_DIR + Utils.TOOLS_PREFIX + toolType + ".json"), false);
+		APEUtils.write2file(apeToolAnnotation.toString(), new File(Utils.TOOLS_DIR + Utils.PRE_BIOHACKATHON + Utils.TOOLS_PREFIX + toolType + ".json"), false);
 	}
 	
 	
