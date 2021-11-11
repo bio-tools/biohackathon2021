@@ -93,7 +93,7 @@ Availability of code monitored by OpenEBench:
 
 More stats from Europe PMC, counting citations of the main publications of the tools
 
-![](Figures/ProteomicsCitations.png){: style="background-color:white;"}
+![](Figures/ProteomicsCitations.png)
 
 Here, red is the distribution of about 50% of all bio.tools tools, grey the publications of proteomics tools.
 
