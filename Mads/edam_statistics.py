@@ -10,11 +10,13 @@ import seaborn as sns
 
 from requests import Response
 
+from biotools_statistics import find_top_terms, get_edam_format
+
 
 def main():
     plt.style.use("ggplot")
     # Read the tools
-    collection_name: str = ""
+    collection_name: str = "Electron microscopy"
     with open(f"Resources/{collection_name.title().replace(' ', '')}Collection/Tools.json", "r", encoding="utf8") as f:
         tools = json.load(f)
 
@@ -33,6 +35,9 @@ def calculate_statistics(raw_tools: list, collection_name: str):
     drop_false = lambda path, key, value: bool(value)
     tools = remap(raw_tools, visit=drop_false)
 
+    top_terms = find_top_terms(tools=tools, term_type="topic", top_n=10)
+    return
+
     # Calculate the EDAM term statistics
     topic_stats = calculate_edam_topic_statistics(tools=tools)
 
@@ -44,8 +49,6 @@ def calculate_statistics(raw_tools: list, collection_name: str):
 
     topic_stats_df, reduced_topic_stats_df = _create_topics_dataframe(topic_stats, collection_folder_name,
                                                                       cutoff_value=0, min_depth=2)
-
-    find_top_terms(reduced_topic_stats_df, collection_name=collection_name)
 
     _create_topics_statistics_plot(topic_stats_df=topic_stats_df, collection_name=collection_name)
     _create_partial_topics_statistics_plot(topic_stats_df=topic_stats_df, count_type="Total",
@@ -61,39 +64,6 @@ def calculate_statistics(raw_tools: list, collection_name: str):
     _create_partial_topics_statistics_plot(topic_stats_df=reduced_topic_stats_df, count_type="Strict",
                                            collection_name=collection_name, min_cutoff=None, min_cutoff_unit="Total",
                                            min_depth=2)
-
-
-def find_top_terms(topic_df: pd.DataFrame, collection_name: str, top_n: int = 10, ):
-    """
-    Find the top number of topics.
-
-    :param topic_df: The number of topics.
-    :param collection_name: The collection name.
-    :param top_n: The top number of topics to be used.
-    """
-    topic_df_total: pd.DataFrame = topic_df[topic_df["Count Type"] == "Total"]
-    topic_df_strict: pd.DataFrame = topic_df[topic_df["Count Type"] == "Strict"]
-    topic_df_total = topic_df_total.sort_values("Count", ascending=False).head(n=top_n)
-    topic_df_strict = topic_df_strict.sort_values("Count", ascending=False).head(n=top_n)
-
-    print(topic_df_total)
-    print("*" * 5)
-    print(topic_df_strict)
-
-    g = sns.catplot(data=topic_df_total, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
-                    legend=False)
-    g.set_xticklabels(rotation=90)
-    g.fig.suptitle(f"Top {top_n} topics in {collection_name} collection based on total terms")
-    g.axes[0, 0].set_xlabel("Term and depth")
-    plt.subplots_adjust(left=0.04, bottom=0.51, right=0.99, top=0.95)
-    plt.show()
-    g = sns.catplot(data=topic_df_strict, x="Label", y="Count", hue="Count Type", ci=None, kind="bar", orient="v",
-                    legend=False)
-    g.set_xticklabels(rotation=90)
-    g.fig.suptitle(f"Top {top_n} topics in {collection_name} collection based on strict terms")
-    g.axes[0, 0].set_xlabel("Term and depth")
-    plt.subplots_adjust(left=0.04, bottom=0.51, right=0.99, top=0.95)
-    plt.show()
 
 
 def calculate_edam_topic_statistics(tools: list) -> dict:

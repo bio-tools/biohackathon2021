@@ -6,7 +6,7 @@ import matplotlib.dates as mdates
 import pandas as pd
 import seaborn as sns
 
-from biotools_statistics import calculate_total_entries_over_time
+from biotools_statistics import calculate_collection_statistics
 
 
 def main():
@@ -14,10 +14,14 @@ def main():
     # Read the tools
     collection_name: str = ""
     with open(f"Resources/{collection_name.title().replace(' ', '')}Collection/Tools.json", "r", encoding="utf8") as f:
-        tools = json.load(f)
+        raw_tools = json.load(f)
+
+    drop_false = lambda path, key, value: bool(value)
+    tools = remap(raw_tools, visit=drop_false)
 
     calculate_statistics(raw_tools=tools, collection_name=collection_name)
 
+    stats_dict = calculate_collection_statistics(tools=tools)
 
 def calculate_statistics(raw_tools: list, collection_name: str, ):
     """
@@ -28,11 +32,12 @@ def calculate_statistics(raw_tools: list, collection_name: str, ):
         :return:
         """
     # Clean the list
-    drop_false = lambda path, key, value: bool(value)
-    tools = remap(raw_tools, visit=drop_false)
 
-    stats_dict: dict = calculate_total_entries_over_time(tools=tools)
-    _create_total_entries_plot(stats_dict=stats_dict, collection_name=collection_name)
+
+    #stats_dict: dict = calculate_total_entries_over_time(tools=tools)
+
+
+    # _create_total_entries_plot(stats_dict=stats_dict, collection_name=collection_name)
 
 
 def _create_total_entries_plot(stats_dict, collection_name):
