@@ -1,4 +1,5 @@
-# BioHackathon Europe 2021 - Making bio.tools fit for workflows
+# BioHackathon Europe 2021 
+## Making bio.tools fit for workflows
 
 With 20.000+ entries, bio.tools is a major registry of computational tools in the life sciences. During the 2021 European BioHackathon, the project "Making bio.tools fit for workflows" was run to address two urgent needs of the platform:
 
