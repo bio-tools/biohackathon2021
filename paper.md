@@ -14,11 +14,26 @@ authors:
   - name: Veit Schwämmle
     orcid: 0000-0002-9708-6722
     affiliation: 2
+  - name: Vedran Kasalica
+    orcid: 0000-0002-0097-1056
+    affiliation: 1
+  - name: Mads Kierkegaard
+    orcid: 0000-0001-5651-6215
+    affiliation: 2
+  - name: Hans Ienasescu
+    affiliation: 3
+  - name: Magnus Palmblad
+    orcid: 0000-0002-5865-8994
+    affiliation: 4
 affiliations:
   - name: Dept. of Information and Computing Sciences, Utrecht University, Netherlands
     index: 1
   - name: Dept. of Biochemistry and Molecular Biology, University of Southern Denmark, Denmark
     index: 2
+  - name: National Life Science Supercomputing Center, Technical University of Denmark, Denmark
+	index: 3
+  - name: Leids Universitair Medisch Centrum: Leiden, Zuid-Holland, Netherlands
+	index: 4
 date: 9 November 2021
 bibliography: paper.bib
 event: BioHackathon Europe 2021
