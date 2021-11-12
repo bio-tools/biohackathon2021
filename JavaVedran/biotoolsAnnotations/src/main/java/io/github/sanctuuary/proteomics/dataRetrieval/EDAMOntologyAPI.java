@@ -1,4 +1,4 @@
-package io.github.sanctuuary.proteomics;
+package io.github.sanctuuary.proteomics.dataRetrieval;
 
 import java.io.File;
 import java.io.IOException;
