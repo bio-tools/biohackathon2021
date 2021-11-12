@@ -31,9 +31,9 @@ affiliations:
   - name: Dept. of Biochemistry and Molecular Biology, University of Southern Denmark, Denmark
     index: 2
   - name: National Life Science Supercomputing Center, Technical University of Denmark, Denmark
-	index: 3
+    index: 3
   - name: Leids Universitair Medisch Centrum: Leiden, Zuid-Holland, Netherlands
-	index: 4
+    index: 4
 date: 9 November 2021
 bibliography: paper.bib
 event: BioHackathon Europe 2021
