@@ -135,8 +135,54 @@ We focus on the **is_format_of** as part of the preliminary approach, with plan 
 
 ## Use Case: The Cascabel Pipeline
 
-Based on [@cascabel], content to be added
+Cascabel [@cascabel] is a variable pipeline for amplicon sequence data analysis, developed by the department of Marine Microbiology and Biogeochemistry at NIOZ Royal Netherlands Institute for Sea Research in collaboration with the department of Earth Sciences at Utrecht University, Netherlands.
 
+It makes an interesting use case for for this project, as it already foresees several variants of the main workflow, and potentially more can be found when taking to account the full content of bio.tools.
+
+# Tools
+
+The tools used in Cascabel are listed in the figure/table at https://www.frontiersin.org/files/Articles/489357/fgene-11-489357-HTML/image_m/fgene-11-489357-t001.jpg
+
+We start with a first assessment of the status of the tools listed in bio.tools, summarized in the table below. Note that the custom scripts mentioned are obviously not available in bio.tools (here's the shim discussion again!) and therefore not included in the table.
+
+| **Tool**  | **in bio.tools?**  | **bio.tools ID**  | **functional annotation?**  |
+|-----------|--------------------|-------------------|-----------------------------|
+| FastQC | yes | biotools:fastqc | yes |
+| PEAR | yes | biotools:pear | no |
+| QIIME | yes | biotools:qiime | no |
+| QIIME | yes | biotools:qiime2 | no |
+| Mothur | no | - | - |
+| usearch61 | no | - | - |
+| VSEARCH | yes | biotools:vsearch | yes | 
+| Cutadapt | yes | biotools:cutadapt | yes | 
+| Cutadapt 1.12 | yes | biotools:cutadapt_1.12 | no |
+| CD-HIT | yes | biotools:cd-hit | yes |
+| SUMACLUST | no | - | - |
+| Swarm | yes | biotools:swarm | yes |
+| UCLUST | no | - | - | 
+| trie | no | - | - |
+| SortMeRna | yes | biotools:sortmerna | no |
+| DADA2 | yes | biotools:dada2 | no | 
+| BLAST | yes | biotools:blast | no |
+| pynast | no | - | - |
+| MAFFT | yes | biotools:MAFFT | yes | 
+| Infernal | yes | biotools:infernal | yes | 
+| ClustalW | yes | biotools:clustalw | yes | 
+| MUSCLE | yes | biotools:muscle | yes | 
+| RAxML | yes | biotools:raxml | no | 
+| FastTree | yes | biotools:fasttree | no | 
+| Krona | yes | biotools:krona | no | 
+
+Next steps: 
+* add the missing tools to bio.tools
+* check and if necessary improve the functional annotations
+* identify additional tools in bio.tools with similar functionality and add them to the Cascabel collection/domain
+
+## Workflows 
+
+Further ahead, the goal is to create new variants of the Cascabel pipeline, ideally using automated workflow exploration as facilitated by APE [@apetool]. In addition to a well-annotated collection of tools, this needs suitable workflow specifications. These consist of available input data types and formats, and desired outputs types and formats, and can be supplemented with constraints expressing, e.g., operations to include or to avoid. These specifications are formulated using terms from the EDAM ontology. 
+
+The Cascabel paper includes a conceptual overview of the workflow at https://www.frontiersin.org/files/Articles/489357/fgene-11-489357-HTML/image_t/fgene-11-489357-g002.gif, which can serve as a blueprint for the required specification, pending its translation to adequate EDAM terms. 
 
 # Discussion
 
