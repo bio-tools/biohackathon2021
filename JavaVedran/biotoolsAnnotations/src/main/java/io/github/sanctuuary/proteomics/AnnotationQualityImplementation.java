@@ -15,13 +15,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
+import io.github.sanctuuary.proteomics.models.BioToolsImprovement;
 import nl.uu.cs.ape.sat.APE;
 import nl.uu.cs.ape.sat.configuration.APEConfigException;
-import nl.uu.cs.ape.sat.core.solutionStructure.SolutionsList;
 import nl.uu.cs.ape.sat.models.AllTypes;
 import nl.uu.cs.ape.sat.models.AuxTypePredicate;
 import nl.uu.cs.ape.sat.models.Module;
-import nl.uu.cs.ape.sat.models.Pair;
 import nl.uu.cs.ape.sat.models.Type;
 import nl.uu.cs.ape.sat.models.logic.constructs.TaxonomyPredicate;
 import nl.uu.cs.ape.sat.utils.APEDimensionsException;
@@ -33,13 +32,15 @@ public class AnnotationQualityImplementation {
 	private String resultsDir;
 	private APE apeFramework;
 	private Map<String, Set<String>> dataTypeFormatDependencies;
+	private Map<String, Set<String>> operationDataTypeInDependencies;
+	private Map<String, Set<String>> operationDataTypeOutDependencies;
 	private List<BioToolsImprovement> bioToolImprovements;
 
 	public AnnotationQualityImplementation(String toolAnnotationDirPath, String resultsDirPath) {
 		List<String> toolAnnotationsDomain = Arrays.asList("toolAnnotationFullBioTools", "toolAnnotationMetabolomics",
 				"toolAnnotationProteomics", "toolAnnotationOriginal");
 
-		for (String toolsName : Utils.getElements(toolAnnotationsDomain, 2)) {
+		for (String toolsName : Utils.getElements(toolAnnotationsDomain, 1)) {
 			toolAnnotations = toolAnnotationDirPath + toolsName + ".json";
 			resultsDir = resultsDirPath + toolsName;
 		}
@@ -101,47 +102,88 @@ public class AnnotationQualityImplementation {
 
 		dataTypeFormatDependencies = extOwlReader.getObjectProperties(Utils.DATA_FORMAT_IRI,
 				"http://edamontology.org/is_format_of");
-
-		AllTypes allTypes = apeFramework.getDomainSetup().getAllTypes();
-		Utils.printStringMap(dataTypeFormatDependencies, allTypes, allTypes);
-
-//		Map<String, Set<String>> operationDataTypeInDependencies = extOwlReader.getObjectProperties(Utils.DATA_FORMAT_IRI, "http://edamontology.org/has_input");
-//		Map<String, Set<String>> operationDataTypeOutDependencies = extOwlReader.getObjectProperties(Utils.DATA_FORMAT_IRI, "http://edamontology.org/has_output");
-
+		operationDataTypeInDependencies = extOwlReader.getObjectProperties(Utils.OPERATION_IRI,
+				"http://edamontology.org/has_input");
+		operationDataTypeOutDependencies = extOwlReader.getObjectProperties(Utils.OPERATION_IRI,
+				"http://edamontology.org/has_output");
+		
+//		Utils.printStringMap(operationDataTypeInDependencies, apeFramework.getDomainSetup().getAllModules(), apeFramework.getDomainSetup().getAllTypes());
+//		Utils.printStringMap(operationDataTypeOutDependencies, apeFramework.getDomainSetup().getAllModules(), apeFramework.getDomainSetup().getAllTypes());
 	}
 
 	/**
-	 * Evaluate the quality of fetched bio.tools based on the EDAM annotations.
+	 * Evaluate the quality of fetched bio.tools based on the <b>is_format_of</b> EDAM object property 
+	 * that reflects data 'format' -> 'type' dependency.
 	 */
-	public void evalateBioTools() {
+	public void evalateBioToolsByEDAM_isformatof() {
 		for (TaxonomyPredicate abstractModule : apeFramework.getDomainSetup().getAllModules().getModules()) {
 			if (abstractModule instanceof Module) {
 				Module module = (Module) abstractModule;
 				for (Type input : module.getModuleInput()) {
-					
-					evaluateInputOutput(module, input, "input");
+					evaluateIODataTypeByEDAM_isformatof(module, input, "inputFromFormat");
 				}
-				
 				for (Type output : module.getModuleOutput()) {
-					
-					evaluateInputOutput(module, output, "output");
+					evaluateIODataTypeByEDAM_isformatof(module, output, "outputFromFormat");
 				}
-
 			}
 		}
 		BioToolsImprovement.setupHeader(resultsDir + "_suggestions.csv");
-		
-		bioToolImprovements.forEach(impr -> impr.print2CSV(resultsDir + "_suggestions.csv"));
+		bioToolImprovements.forEach(impr -> impr.print2CSV(resultsDir + "_suggestionsBy_is_format_of.csv"));
 
 	}
-
-	private void evaluateInputOutput(Module module, Type input, String infoIO) {
-
+	
+	/**
+	 * Evaluate the quality of fetched bio.tools based on the <b>has_input</b> EDAM object property 
+	 * that reflects 'operation' -> 'input data type' dependency.
+	 */
+	public void evalateBioToolsByEDAM_hasinput() {
+		String fileDecr = "_has_input";
 		
-		SortedSet<TaxonomyPredicate> predicates = ((AuxTypePredicate) input).getGeneralizedPredicates();
-//		predicates.first().getRootNodeID()
-		TaxonomyPredicate dataFormat = predicates.stream()
-				.filter(x -> x.getRootNodeID().equals(Utils.DATA_FORMAT_IRI)).findFirst().get();
+		for (TaxonomyPredicate abstractModule : apeFramework.getDomainSetup().getAllModules().getModules()) {
+			if (abstractModule instanceof Module) {
+				Module module = (Module) abstractModule;
+				for (Type input : module.getModuleInput()) {
+					evaluateIODataTypeByEDAM_hasIO(module, input, "inputFromOperation");
+				}
+				for (Type output : module.getModuleOutput()) {
+//					evaluateIODataTypeByEDAM_hasinput(module, output, "outputFromOperation");
+				}
+			}
+		}
+		
+		BioToolsImprovement.setupHeader(resultsDir + "_suggestionsBy " + fileDecr+ ".csv");
+		bioToolImprovements.forEach(impr -> impr.print2CSV(resultsDir + "_suggestionsBy " + fileDecr+ ".csv"));
+
+	}
+	
+	/**
+	 * Evaluate the module 
+	 * @param module
+	 * @param inputOrOutput
+	 * @param infoIO
+	 */
+	private void evaluateIODataTypeByEDAM_hasIO(Module module, Type inputOrOutput, String infoIO) {
+		
+	}
+	
+
+	/**
+	 * Evaluate a data type that is tool input or tool output based on the given set of dependencies.
+	 * The evaluation focuses strictly on checking whether the expected type annotation is more 
+	 * concrete than the annotated type in bio.tools. In that case it suggests the expected <b> data  type</b> instead.
+	 *  
+	 * @param module
+	 * @param inputOrOutput
+	 * @param infoIO
+	 * @param dataTypeDependencies - map of dependencies that is looked at.
+//	 * @param useIsFormatOf - {@code true} if the dependency is based on <b>is_format_of</b> EDAM object property. 
+ 								 {@code false} if the dependency is based on <b>has_input</b> or <b>has_output</b> EDAM object property. 
+	 */
+	private void evaluateIODataTypeByEDAM_isformatof(Module module, Type inputOrOutput, String infoIO) {
+
+		SortedSet<TaxonomyPredicate> predicates = ((AuxTypePredicate) inputOrOutput).getGeneralizedPredicates();
+		TaxonomyPredicate dataFormat = predicates.stream().filter(x -> x.getRootNodeID().equals(Utils.DATA_FORMAT_IRI))
+				.findFirst().get();
 		if (dataFormat instanceof AuxTypePredicate) {
 			return;
 		}
@@ -150,143 +192,59 @@ public class AnnotationQualityImplementation {
 			return;
 		}
 
-		TaxonomyPredicate dataType = predicates.stream()
-				.filter(x -> x.getRootNodeID().equals(Utils.DATA_TYPE_IRI)).findFirst().get();
+		TaxonomyPredicate dataType = predicates.stream().filter(x -> x.getRootNodeID().equals(Utils.DATA_TYPE_IRI))
+				.findFirst().get();
 
 		if (dataType instanceof AuxTypePredicate) {
 			return;
 		}
-
-		Set<String> altTypeIDs = evaluateFormatTypeDepencency(module, dataFormat, dataType);
 		
-		if(altTypeIDs.size() > 0) {
+		Set<String> altTypeIDs = evaluateFormatTypeDepencency(module, dataFormat, dataType);
+		if (altTypeIDs.size() > 0) {
 			AllTypes allTypes = apeFramework.getDomainSetup().getAllTypes();
 			Set<TaxonomyPredicate> altTypes = altTypeIDs.stream().map(typeID -> allTypes.get(typeID))
-														.collect(Collectors.toSet());
-			bioToolImprovements.add(new BioToolsImprovement(module, infoIO , dataFormat, dataType, altTypes));
-			
+					.collect(Collectors.toSet());
+			bioToolImprovements.add(new BioToolsImprovement(module, infoIO, dataFormat, dataType, altTypes));
+
 		}
-	
-		
+
 	}
 
 	/**
-	 * Evaluate the relation between the given and expected data type.
-	 * @param usedDataFormat
-	 * @param usedDataType
-	 * @param dataType 
+	 * Evaluate the relation between the given and expected data type, based on the annotated concept.
+	 * @param module - module that is being used
+	 * @param conceptCreatingDependecy - concept that is used to infer the expected data type
+	 * @param usedDataType - data type that is evaluated
 	 * @return
 	 */
-	private Set<String> evaluateFormatTypeDepencency(TaxonomyPredicate module, TaxonomyPredicate usedDataFormat, TaxonomyPredicate usedDataType) {
-		
+	private Set<String> evaluateFormatTypeDepencency(TaxonomyPredicate module, TaxonomyPredicate conceptCreatingDependecy,
+			TaxonomyPredicate usedDataType) {
 		Set<String> setOfNewTypes = new HashSet<String>();
-		
-		Set<String> expectedDataTypeIDs = dataTypeFormatDependencies.get(usedDataFormat.getPredicateID());
-		
+		Set<String> expectedDataTypeIDs = dataTypeFormatDependencies.get(conceptCreatingDependecy.getPredicateID());
 		for (String expectedDataTypeID : expectedDataTypeIDs) {
 			TaxonomyPredicate expectedDataType = apeFramework.getDomainSetup().getAllTypes().get(expectedDataTypeID);
-			
-			if(isTermMoreSpecific(module, expectedDataType, usedDataType, true)) {
+			if (isTermMoreSpecific(module, expectedDataType, usedDataType, true)) {
 				setOfNewTypes.add(expectedDataTypeID);
 			}
 		}
-		
 		return setOfNewTypes;
 	}
-	
 
-	private boolean isTermMoreSpecific(TaxonomyPredicate module, TaxonomyPredicate expectedDataType, TaxonomyPredicate usedDataType, boolean firstCall) {
+	private boolean isTermMoreSpecific(TaxonomyPredicate module, TaxonomyPredicate expectedDataType,
+			TaxonomyPredicate usedDataType, boolean firstCall) {
 		boolean moreSpecific = false;
-
-		if(firstCall && usedDataType.equals(expectedDataType)) {
-			System.out.println("This tool " + module.getPredicateLabel() + " is verified and aligns with EDAM.");
+		if (firstCall && usedDataType.equals(expectedDataType)) {
 			return false;
 		}
-		
 		// test if it is superclass? bio.tools are better in that case
-		for(TaxonomyPredicate subType : usedDataType.getSubPredicates()) {
-			if(subType.equals(expectedDataType)) {
+		for (TaxonomyPredicate subType : usedDataType.getSubPredicates()) {
+			if (subType.equals(expectedDataType)) {
 				return true;
 			} else {
 				moreSpecific = moreSpecific || isTermMoreSpecific(module, expectedDataType, subType, false);
 			}
 		}
-		
 		return moreSpecific;
-	}
-
-	private static String createCSVRow(String predicateLabel, String orderNo, String dataDepth, String formatDepth) {
-		String csvROw = predicateLabel.replace(",", ";") + "\t " + orderNo + "\t " + dataDepth + "\t" + formatDepth
-				+ "\n";
-		return csvROw;
-	}
-
-	/**
-	 * Calculate the furtherest leaf in the taxonomy from the currData class.
-	 * 
-	 * @param currData - class in the taxonomy that is evaluated
-	 * @return
-	 */
-	private static int calculateDepth(TaxonomyPredicate currData) {
-		int maxDepth = 0;
-		for (TaxonomyPredicate subData : APEUtils.safe(currData.getSubPredicates())) {
-			int newDepth = calculateDepth(subData) + 1;
-			maxDepth = Math.max(maxDepth, newDepth);
-		}
-
-		return maxDepth;
-	}
-
-	private static File getOutFile(String resultFilePath) {
-		return new File(resultFilePath + "_outputs.csv");
-	}
-
-	private static File getInFile(String resultFilePath) {
-		return new File(resultFilePath + "_inputs.csv");
-	}
-
-	private static void deleteExistingResults(String resultFilePath) {
-		try {
-			getOutFile(resultFilePath).delete();
-		} catch (Exception e) {
-			// skip
-			System.err.println("Delete failed.");
-		}
-		try {
-			getInFile(resultFilePath).delete();
-		} catch (Exception e) {
-			// skip
-			System.err.println("Delete failed.");
-		}
-
-	}
-
-	private static void setupHeaders(String resultFilePath) {
-		try {
-			APEUtils.write2file(createCSVRow("Name", "OrderNo", "Data Depth", "Format depth"),
-					getOutFile(resultFilePath), true);
-		} catch (Exception e) {
-			// skip
-			System.err.println("Delete failed.");
-		}
-		try {
-			APEUtils.write2file(createCSVRow("Name", "OrderNo", "Data Depth", "Format depth"),
-					getInFile(resultFilePath), true);
-		} catch (Exception e) {
-			// skip
-			System.err.println("Delete failed.");
-		}
-
-	}
-
-	public static String concat(String... strings) {
-		String concat = "";
-		for (String s : strings) {
-			if (s != "") {
-				concat += s + "_";
-			}
-		}
-		return APEUtils.removeLastChar(concat);
 	}
 
 	/**
@@ -302,16 +260,6 @@ public class AnnotationQualityImplementation {
 			throws JSONException, IOException {
 		coreConfigJson.put(tag, toolAnnotationsPath);
 		return coreConfigJson;
-	}
-
-	private static boolean writeCSVSolutionStatistics(SolutionsList solutions, File output) throws IOException {
-		StringBuilder solutionsFoundCSV = new StringBuilder("Length, Solutions\n");
-		for (Pair<Integer> solutionsForLength : solutions.getSolutionsPerLength()) {
-			solutionsFoundCSV = solutionsFoundCSV.append(solutionsForLength.getFirst()).append(",")
-					.append(solutionsForLength.getSecond()).append("\n");
-		}
-		APEUtils.write2file(solutionsFoundCSV.toString(), output, false);
-		return true;
 	}
 
 }

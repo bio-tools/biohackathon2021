@@ -1,4 +1,4 @@
-package io.github.sanctuuary.proteomics;
+package io.github.sanctuuary.proteomics.models;
 
 import java.io.File;
 import java.util.Set;

@@ -104,9 +104,9 @@ public class ExtendedOWLReader {
 	 * @param objectPropertyIRI 
 	 *
 	 * @param dataFormatDependencies - Existing data/format dependencies
-	 * @param reasoner               Reasoner used to provide subclasses.
-	 * @param currClass              The class (node) currently explored.
-	 * @param superClass             The superclass of the currClass.
+	 * @param reasoner               - Reasoner used to provide subclasses.
+	 * @param currClass              - The class (node) currently explored.
+	 * @param superClass             - The superclass of the currClass.
 	 */
 	private void exploreTypeFormatDepencencyRec(String objectPropertyIRI, Map<String, Set<String>> dataFormatDependencies, OWLReasoner reasoner,
 			OWLClass currClass, Set<String> dependantDataTypes) {
@@ -120,6 +120,7 @@ public class ExtendedOWLReader {
 			 * Adding the dependency from Data Format to Type
 			 */
 			if(dataFormatDependencies.get(currTypeID) == null) {
+				
 				dataFormatDependencies.put(currTypeID, dataTypes);
 			} else {
 				dataFormatDependencies.get(currTypeID).addAll(dataTypes);

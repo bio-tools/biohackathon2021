@@ -1,4 +1,4 @@
-package io.github.sanctuuary.proteomics;
+package io.github.sanctuuary.proteomics.dataRetrieval;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,18 +6,19 @@ import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import io.github.sanctuuary.proteomics.Utils;
 import nl.uu.cs.ape.sat.utils.APEUtils;
 
 public class ConfiguringDomain {
 
 	
 	public static void setupDomain() throws IOException {
-		getLimitedToolSet(Utils.TOOLS_DIR + "toolList.json");
+//		getLimitedToolSet(Utils.TOOLS_DIR + "toolList.json");
 //		System.out.println();
 //		getToolSetFromDomain("proteomics", "Proteomics");
 		
 		System.out.println();
-//		getToolSetFromEDAMTopic("topic_3172", "Metabolomics");
+		getToolSetFromEDAMTopic("topic_3538", "Protein disordered structure");
 //		
 //		System.out.println();
 //		getToolSetFromDomain("", "FullBioTools");
