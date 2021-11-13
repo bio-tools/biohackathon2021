@@ -10,8 +10,6 @@ import seaborn as sns
 
 from requests import Response
 
-from biotools_statistics import find_top_terms, get_edam_format
-
 
 def main():
     plt.style.use("ggplot")
@@ -34,9 +32,6 @@ def calculate_statistics(raw_tools: list, collection_name: str):
     # Clean the list
     drop_false = lambda path, key, value: bool(value)
     tools = remap(raw_tools, visit=drop_false)
-
-    top_terms = find_top_terms(tools=tools, term_type="topic", top_n=10)
-    return
 
     # Calculate the EDAM term statistics
     topic_stats = calculate_edam_topic_statistics(tools=tools)
@@ -188,7 +183,6 @@ def _create_topics_dataframe(topic_stats: dict, collection_folder_name: str, cut
     :param topic_stats: The topic statistics.
     :param collection_folder_name: The folder name for the collection.
     :param cutoff_value: The cut-off for a term to be accepted.
-        # TODO: Should properly be a percentage of the total number of tools instead of an actual number.
     :param min_depth: The minimum depth to use.
     :return: The data frame with the topic statistics. One for the total and one for the reduced.
     """
