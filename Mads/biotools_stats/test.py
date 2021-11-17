@@ -39,26 +39,20 @@ def main():
     with open("Tools.json", "r") as f:
         tools = json.load(f)
 
+    term_stats = calculate_edam_term_statistics(tools=tools, term_type="topic", index_list=_get_index_list("topic"))
+    print(json.dumps(term_stats, indent=4))
+    print("\n"*2)
+
+    term_stats = calculate_edam_term_statistics(tools=tools, term_type="operation", index_list=_get_index_list("operation"))
+    print(json.dumps(term_stats, indent=4))
+    print("\n"*2)
+
     term_stats = calculate_edam_term_statistics(tools=tools, term_type="format", index_list=_get_index_list("format"))
     print(json.dumps(term_stats, indent=4))
-    # terms = extract_edam_topics(tools=tools)
-    # print(json.dumps(terms, indent=4))
-    # print("\n"*2)
-    #
-    # terms = extract_edam_operation(tools=tools)
-    # print(json.dumps(terms, indent=4))
-    # print("\n"*2)
-    #
-    # terms = extract_edam_format(tools=tools)
-    # print(json.dumps(terms, indent=4))
-    # print("\n"*2)
-    #
-    # terms = extract_edam_data(tools=tools)
-    # print(json.dumps(terms, indent=4))
-    # print("\n"*2)
-
-    # stats = calculate_general_statistics(tools=tools)
-    # print(json.dumps(stats, indent=4))
+    print("\n"*2)
+    
+    term_stats = calculate_edam_term_statistics(tools=tools, term_type="data", index_list=_get_index_list("data"))
+    print(json.dumps(term_stats, indent=4))
 
 
 if __name__ == "__main__":
