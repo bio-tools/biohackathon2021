@@ -21,7 +21,7 @@ def calculate_general_statistics(tools: list, upper_time_limit: datetime = datet
 
     # Filter the tools according to the upper time limit
     tools = [tool for tool in tools
-             if datetime.strptime(date_string=tool["AdditionDate"], format="%y-%m-%dT%h:%M:%SZ") < upper_time_limit]
+             if datetime.strptime(tool["additionDate"], "%Y-%m-%dT%H:%M:%SZ") < upper_time_limit]
 
     # Create the dictionary to hold the statistics and calculate the statistics
     stats: Dict[str, Union[int, Dict[str, int]]] = {}
