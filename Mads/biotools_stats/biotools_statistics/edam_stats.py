@@ -2,6 +2,7 @@
 The scripts for calculating statistics for the EDAM terms for the terms.
 
 """
+import itertools
 from collections import defaultdict
 
 
@@ -168,7 +169,7 @@ def _extract_edam_format(tools: dict) -> dict:
     terms: defaultdict = defaultdict(lambda: [])
 
     for tool in tools:
-        terms[tool["biotoolsID"]].extend(_get_inputs_outputs_info(tool=tool, term_type="format"))
+        terms[tool["biotoolsID"]].extend(itertools.chain(*_get_inputs_outputs_info(tool=tool, term_type="format")))
     return terms
 
 
