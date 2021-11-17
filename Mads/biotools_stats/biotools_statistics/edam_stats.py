@@ -4,6 +4,7 @@ The scripts for calculating statistics for the EDAM terms for the terms.
 """
 import itertools
 from collections import defaultdict
+from datetime import datetime
 
 
 def calculate_edam_term_statistics(tools: dict, term_type: str, index_list: dict) -> dict:
@@ -22,7 +23,9 @@ def calculate_edam_term_statistics(tools: dict, term_type: str, index_list: dict
                  "strict_ids": set(), "total_ids": set(),
                  "strict_count": 0, "total_count": 0})
 
-    statistics["TermType"] = term_type.capitalize()
+    # TODO: Determine the best way to add the data, if at all
+    # statistics["termType"] = term_type.lower()
+    # statistics["date"] = datetime.today().strftime("%Y-%m-%d")
     tool_terms: dict = _extract_terms(tools=tools, term_type=term_type)
     # Loop over the tools and the topics
     for toolID in tool_terms:
@@ -31,7 +34,7 @@ def calculate_edam_term_statistics(tools: dict, term_type: str, index_list: dict
 
     # Loop over the statistics
     for term in statistics:
-        if term == "TermType":
+        if term == "termType" or term == "date":
             continue
         statistics[term]["strict_ids"] = list(statistics[term]["strict_ids"])
         statistics[term]["total_ids"] = list(statistics[term]["total_ids"])
