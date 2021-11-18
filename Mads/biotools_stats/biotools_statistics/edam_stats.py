@@ -47,7 +47,6 @@ def calculate_edam_term_statistics(tools: list, term_type: str, index_list: dict
                  "strict_ids": [], "total_ids": [],
                  "strict_count": 0, "total_count": 0})
 
-
     # Loop over the statistics
     for term_id in temp_statistics:
         statistics[term_type][term_id]["name"] = temp_statistics[term_id]["name"]

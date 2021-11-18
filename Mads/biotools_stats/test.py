@@ -5,8 +5,6 @@ Used for showing plots etc.
 If script is to run on other machines, please be aware of the file path.
 """
 import requests
-import seaborn as sns
-import matplotlib.pyplot as plt
 import json
 
 from requests import Response
@@ -41,20 +39,22 @@ def main():
 
     stats = calculate_general_statistics(tools=tools)
 
-    print(json.dumps(stats, indent=4))
+    # print(json.dumps(stats, indent=4))
 
     term_stats = calculate_edam_term_statistics(tools=tools, term_type="topic", index_list=_get_index_list("topic"))
     print(json.dumps(term_stats, indent=4))
-    print("\n"*2)
+    print("\n" * 2)
 
-    term_stats = calculate_edam_term_statistics(tools=tools, term_type="operation", index_list=_get_index_list("operation"))
+    exit()
+    term_stats = calculate_edam_term_statistics(tools=tools, term_type="operation",
+                                                index_list=_get_index_list("operation"))
     print(json.dumps(term_stats, indent=4))
-    print("\n"*2)
+    print("\n" * 2)
 
     term_stats = calculate_edam_term_statistics(tools=tools, term_type="format", index_list=_get_index_list("format"))
     print(json.dumps(term_stats, indent=4))
-    print("\n"*2)
-    
+    print("\n" * 2)
+
     term_stats = calculate_edam_term_statistics(tools=tools, term_type="data", index_list=_get_index_list("data"))
     print(json.dumps(term_stats, indent=4))
 
