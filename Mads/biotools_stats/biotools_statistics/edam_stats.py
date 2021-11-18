@@ -6,45 +6,61 @@ import itertools
 from collections import defaultdict
 from datetime import datetime
 
+from ._utilities import clean_and_filter_tool_list
 
-def calculate_edam_term_statistics(tools: dict, term_type: str, index_list: dict) -> dict:
+
+def calculate_edam_term_statistics(tools: list, term_type: str, index_list: dict,
+                                   upper_time_limit: datetime = datetime.today()) -> dict:
     """
     Calculate the statistics for EDAM terms.
 
     :param tools: The tool list.
     :param term_type: The term type to calculate statistics for.
     :param index_list: The index list for the terms.
+    :param upper_time_limit: Calculate the statistics for tools added up to the time limit.
+        Default: datetime.datetime.today()
     :return: The dictionary with the terms, the IDs and counts for strict (Only the specific term)
         and total (for parent terms).
     """
+
+    tools = clean_and_filter_tool_list(raw_tools=tools, upper_time_limit=upper_time_limit)
+
     # Create the dictionary to hold the topic statistics with the default fields.
-    statistics = defaultdict(
+    temp_statistics = defaultdict(
         lambda: {"name": "", "depth": -1,
                  "strict_ids": set(), "total_ids": set(),
                  "strict_count": 0, "total_count": 0})
 
-    # TODO: Determine the best way to add the data, if at all
-    # statistics["termType"] = term_type.lower()
-    # statistics["date"] = datetime.today().strftime("%Y-%m-%d")
+    term_type = term_type.lower()
+
     tool_terms: dict = _extract_terms(tools=tools, term_type=term_type)
     # Loop over the tools and the topics
     for toolID in tool_terms:
         for term in tool_terms[toolID]:
-            statistics = _add_terms(stats=statistics, term=term, tool_id=toolID, index_list=index_list)
+            statistics = _add_terms(stats=temp_statistics, term=term, tool_id=toolID, index_list=index_list)
+
+    # Create the final statistics dict
+    statistics: dict = {}
+    statistics["date"] = upper_time_limit.isoformat(timespec="seconds")
+    statistics[term_type]: defaultdict = defaultdict(
+        lambda: {"name": "", "depth": -1,
+                 "strict_ids": [], "total_ids": [],
+                 "strict_count": 0, "total_count": 0})
+
 
     # Loop over the statistics
-    for term in statistics:
-        if term == "termType" or term == "date":
-            continue
-        statistics[term]["strict_ids"] = list(statistics[term]["strict_ids"])
-        statistics[term]["total_ids"] = list(statistics[term]["total_ids"])
-        statistics[term]["strict_count"] = len(statistics[term]["strict_ids"])
-        statistics[term]["total_count"] = len(statistics[term]["total_ids"])
+    for term_id in temp_statistics:
+        statistics[term_type][term_id]["name"] = temp_statistics[term_id]["name"]
+        statistics[term_type][term_id]["depth"] = temp_statistics[term_id]["depth"]
+        statistics[term_type][term_id]["strict_ids"] = list(temp_statistics[term_id]["strict_ids"])
+        statistics[term_type][term_id]["total_ids"] = list(temp_statistics[term_id]["total_ids"])
+        statistics[term_type][term_id]["strict_count"] = len(temp_statistics[term_id]["strict_ids"])
+        statistics[term_type][term_id]["total_count"] = len(temp_statistics[term_id]["total_ids"])
 
     return statistics
 
 
-def _add_terms(stats: dict, term: dict, tool_id: dict, index_list: dict) -> dict:
+def _add_terms(stats: dict, term: dict, tool_id: str, index_list: dict) -> dict:
     """
     Add term to the statistics.
 
@@ -109,7 +125,7 @@ def _add_term_info(stats: dict, term_id: str, index_list: dict) -> dict:
     return stats
 
 
-def _extract_terms(tools: dict, term_type: str) -> dict:
+def _extract_terms(tools: list, term_type: str) -> dict:
     """
     Extract terms from the tools.
 
@@ -132,7 +148,7 @@ def _extract_terms(tools: dict, term_type: str) -> dict:
                          f"'Data'.")
 
 
-def _extract_edam_topics(tools: dict) -> dict:
+def _extract_edam_topics(tools: list) -> dict:
     """
     Get the EDAM topics for each tool.
 
@@ -147,7 +163,7 @@ def _extract_edam_topics(tools: dict) -> dict:
     return terms
 
 
-def _extract_edam_operation(tools: dict) -> dict:
+def _extract_edam_operation(tools: list) -> dict:
     """
     Get the EDAM operation for each tool.
 
@@ -162,7 +178,7 @@ def _extract_edam_operation(tools: dict) -> dict:
     return terms
 
 
-def _extract_edam_format(tools: dict) -> dict:
+def _extract_edam_format(tools: list) -> dict:
     """
     Get the EDAM format for each tool.
 
@@ -176,7 +192,7 @@ def _extract_edam_format(tools: dict) -> dict:
     return terms
 
 
-def _extract_edam_data(tools: dict) -> dict:
+def _extract_edam_data(tools: list) -> dict:
     """
     Get the EDAM data for each tool.
 
