@@ -39,6 +39,10 @@ def main():
     with open("Tools.json", "r") as f:
         tools = json.load(f)
 
+    stats = calculate_general_statistics(tools=tools)
+
+    print(json.dumps(stats, indent=4))
+
     term_stats = calculate_edam_term_statistics(tools=tools, term_type="topic", index_list=_get_index_list("topic"))
     print(json.dumps(term_stats, indent=4))
     print("\n"*2)
