@@ -8,6 +8,7 @@ matplotlib = "*"
 seaborn = "*"
 boltons = "*"
 requests = "*"
+python-dateutil = "*"
 
 [dev-packages]
 
