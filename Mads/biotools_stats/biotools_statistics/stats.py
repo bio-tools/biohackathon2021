@@ -4,7 +4,7 @@ The script for calculating the different statistics for a given tool list.
 from datetime import datetime
 from typing import Dict, Union, List
 
-from ._utilities import clean_list
+from ._utilities import clean_and_filter_tool_list
 
 
 def calculate_general_statistics(tools: list, upper_time_limit: datetime = datetime.today()):
@@ -17,15 +17,11 @@ def calculate_general_statistics(tools: list, upper_time_limit: datetime = datet
     :return: The dictionary with the statistics.
     """
     # Clean the list of tools
-    tools = clean_list(raw_tools=tools)
-
-    # Filter the tools according to the upper time limit
-    tools = [tool for tool in tools
-             if datetime.strptime(tool["additionDate"], "%Y-%m-%dT%H:%M:%SZ") < upper_time_limit]
+    tools = clean_and_filter_tool_list(raw_tools=tools, upper_time_limit=upper_time_limit)
 
     # Create the dictionary to hold the statistics and calculate the statistics
     stats: Dict[str, Union[str, int, Dict[str, int]]] = {}
-    stats["date"] = upper_time_limit.strftime("%Y-%m-%d")
+    stats["date"] = upper_time_limit.isoformat(timespec="seconds")
     stats["toolCount"] = len(tools)
 
     stats["hasToolType"] = len([tool for tool in tools if "toolType" in tool])
