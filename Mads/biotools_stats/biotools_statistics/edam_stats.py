@@ -70,7 +70,7 @@ def _add_terms(stats: dict, term: dict, tool_id: str, index_list: dict) -> dict:
     :return: The statistics dictionary.
     """
     # Get the term id
-    term_id = term["uri"].split("/")[3]  # Example split: ['http:', '', 'edamontology.org', 'topic_3577']
+    term_id = term["uri"].replace("http://edamontology.org/", "")
     # Add to the id lists
     stats[term_id]["strict_ids"].add(tool_id)
     stats[term_id]["total_ids"].add(tool_id)
