@@ -10,7 +10,7 @@ from ._utilities import clean_and_filter_tool_list
 
 
 def calculate_edam_term_statistics(tools: list, term_type: str, index_list: dict,
-                                   upper_time_limit: datetime = datetime.today()) -> dict:
+                                   upper_time_limit: datetime = datetime.today(), output_ids: bool = False) -> dict:
     """
     Calculate the statistics for EDAM terms.
 
@@ -18,7 +18,8 @@ def calculate_edam_term_statistics(tools: list, term_type: str, index_list: dict
     :param term_type: The term type to calculate statistics for.
     :param index_list: The index list for the terms.
     :param upper_time_limit: Calculate the statistics for tools added up to the time limit.
-        Default: datetime.datetime.today()
+        Default: datetime.datetime.today().
+    :param output_ids: Indicate whether the ids should be in the output. Default: False.
     :return: The dictionary with the terms, the IDs and counts for strict (Only the specific term)
         and total (for parent terms).
     """
@@ -51,10 +52,12 @@ def calculate_edam_term_statistics(tools: list, term_type: str, index_list: dict
     for term_id in temp_statistics:
         statistics[term_type][term_id]["name"] = temp_statistics[term_id]["name"]
         statistics[term_type][term_id]["depth"] = temp_statistics[term_id]["depth"]
-        statistics[term_type][term_id]["strict_ids"] = list(temp_statistics[term_id]["strict_ids"])
-        statistics[term_type][term_id]["total_ids"] = list(temp_statistics[term_id]["total_ids"])
-        statistics[term_type][term_id]["strict_count"] = len(temp_statistics[term_id]["strict_ids"])
         statistics[term_type][term_id]["total_count"] = len(temp_statistics[term_id]["total_ids"])
+        statistics[term_type][term_id]["strict_count"] = len(temp_statistics[term_id]["strict_ids"])
+
+        if output_ids:
+            statistics[term_type][term_id]["total_ids"] = list(temp_statistics[term_id]["total_ids"])
+            statistics[term_type][term_id]["strict_ids"] = list(temp_statistics[term_id]["strict_ids"])
 
     return statistics
 
