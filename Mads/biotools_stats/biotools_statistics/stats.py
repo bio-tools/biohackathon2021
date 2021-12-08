@@ -28,8 +28,8 @@ def calculate_general_statistics(tools: list, upper_time_limit: datetime = datet
     stats["toolTypeCount"] = sum([len(tool["toolType"]) for tool in tools if "toolType" in tool])
     stats["toolTypes"] = _calculate_tool_type_statistics(tools=tools)
 
-    stats["hasTopic"] = len([tool for tool in tools if len(tool["topic"]) > 0])
-    stats["topicCount"] = sum([len(tool["topic"]) for tool in tools])
+    stats["hasTopic"] = len([tool for tool in tools if "topic" in tool])
+    stats["topicCount"] = sum([len(tool["topic"]) for tool in tools if "topic" in tool])
 
     stats["hasOperatingSystem"] = len([tool for tool in tools if "operatingSystem" in tool])
     stats["operatingSystemCount"] = sum([len(tool["operatingSystem"]) for tool in tools if "operatingSystem" in tool])
