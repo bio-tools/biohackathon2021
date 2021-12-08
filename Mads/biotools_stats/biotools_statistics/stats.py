@@ -55,12 +55,15 @@ def calculate_general_statistics(tools: list, upper_time_limit: datetime = datet
     stats["accessibility"] = _calculate_code_accessibility_statistics(tools=tools)
 
     stats["hasElixirPlatform"] = len([tool for tool in tools if "elixirPlatform" in tool])
+    stats["elixirPlatformCount"] = sum([len(tool["elixirPlatform"]) for tool in tools if "elixirPlatform" in tool])
     stats["elixirPlatform"] = _calculate_elixir_platform_statistics(tools=tools)
 
     stats["hasElixirNode"] = len([tool for tool in tools if "elixirNode" in tool])
+    stats["elixirNodeCount"] = sum([len(tool["elixirNode"]) for tool in tools if "elixirNode" in tool])
     stats["elixirNodes"] = _calculate_elixir_node_statistics(tools=tools)
 
     stats["hasElixirCommunity"] = len([tool for tool in tools if "elixirCommunity" in tool])
+    stats["elixirCommunityCount"] = sum([len(tool["elixirCommunity"]) for tool in tools if "elixirCommunity" in tool])
     stats["elixirCommunity"] = _calculate_elixir_community_statistics(tools=tools)
 
     stats["hasLinks"] = len([tool for tool in tools if "link" in tool])
