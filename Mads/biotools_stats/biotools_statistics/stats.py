@@ -163,7 +163,7 @@ def _calculate_license_statistics(tools: list) -> dict:
     """
     LICENSE_TYPES: List[str] = ["OSIApproved", "FSFApproved", "Freeware", "Proprietary", "Other", "NoLicense",
                                 "DeprecatedIdentifier"]
-    # Obtained from: https://opensource.org/licenses/alphabetical
+    # Obtained from: https://spdx.org/licenses/ - TODO: Consider non-hardcoded approach
     OSI_APPROVED_LICENSES: List[str] = ["0BSD", "AAL", "APL-1.0", "APSL-1.0", "APSL-1.1", "APSL-1.2", "Artistic-1.0",
                                         "Artistic-1.0-cl8", "Artistic-1.0-Perl", "BSD-1-Clause", "BSD-2-Clause-Patent",
                                         "BSD-3-Clause-LBNL", "CAL-1.0", "CAL-1.0-Combined-Work-Exception", "CATOSL-1.1",
