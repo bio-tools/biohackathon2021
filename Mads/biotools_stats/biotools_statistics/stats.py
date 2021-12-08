@@ -100,6 +100,7 @@ def _calculate_tool_type_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The tool type statistics.
     """
+    # TODO: Consider non-hardcoded approach
     TOOL_TYPES: List[str] = ["Bioinformatics portal", "Command-line tool", "Database portal", "Desktop application",
                              "Library", "Ontology", "Plug-in", "Script", "SPARQL endpoint", "Suite", "Web application",
                              "Web API", "Web service", "Workbench", "Workflow"]
@@ -119,6 +120,7 @@ def _calculate_os_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The OS statistics.
     """
+    # TODO: Consider non-hardcoded approach
     OPERATING_SYSTEMS: List[str] = ["Mac", "Linux", "Windows"]
     os_stats: Dict[str, int] = {key: 0 for key in OPERATING_SYSTEMS}
 
@@ -136,6 +138,7 @@ def _calculate_language_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The language statistics.
     """
+    # TODO: Consider non-hardcoded approach
     LANGUAGES: List[str] = ["ActionScript", "Ada", "AppleScript", "Assembly language", "AWK", "Bash", "C", "C#", "C++",
                             "COBOL", "ColdFusion", "CWL", "D", "Delphi", "Dylan", "Eiffel", "Elm", "Forth", "Fortran",
                             "Groovy", "Haskell", "Icarus", "Java", "JavaScript", "JSP", "Julia", "LabVIEW", "Lisp",
@@ -238,6 +241,7 @@ def _calculate_maturity_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The code accessibility language statistics.
     """
+    # TODO: Consider non-hardcoded approach
     MATURITY: List[str] = ["Emerging", "Mature", "Legacy"]
     maturity_stats: Dict[str, int] = {key: 0 for key in MATURITY}
 
@@ -254,6 +258,7 @@ def _calculate_cost_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The cost statistics.
     """
+    # TODO: Consider non-hardcoded approach
     COSTS: List[str] = ["Free of charge", "Free of charge (with restrictions)", "Commercial"]
     cost_stats: Dict[str, int] = {key: 0 for key in COSTS}
 
@@ -270,6 +275,7 @@ def _calculate_code_accessibility_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The code accessibility language statistics.
     """
+    # TODO: Consider non-hardcoded approach
     ACCESSIBILITY: List[str] = ["Restricted access", "Open access", "Open access (with restrictions)"]
     accessibility_stats: Dict[str, int] = {key: 0 for key in ACCESSIBILITY}
 
@@ -286,6 +292,7 @@ def _calculate_elixir_platform_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The ELIXIR platform statistics.
     """
+    # TODO: Consider non-hardcoded approach
     PLATFORMS: List[str] = ["Data", "Tools", "Compute", "Interoperability", "Training"]
     platform_stats: Dict[str, int] = {key: 0 for key in PLATFORMS}
 
@@ -303,6 +310,7 @@ def _calculate_elixir_node_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The ELIXIR node statistics.
     """
+    # TODO: Consider non-hardcoded approach
     NODES: List[str] = ["Belgium", "Czech Republic", "Denmark", "EMBL", "Estonia", "Finland", "France", "Germany",
                         "Greece", "Hungary", "Ireland", "Israel", "Italy", "Luxembourg", "Netherlands", "Norway",
                         "Portugal", "Slovenia", "Spain", "Sweden", "Switzerland", "UK"]
@@ -322,6 +330,7 @@ def _calculate_elixir_community_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The ELIXIR community statistics.
     """
+    # TODO: Consider non-hardcoded approach
     COMMUNITY: List[str] = ["3D-BioInfo", "Federated Human Data", "Galaxy", "Human Copy Number Variation",
                             "Intrinsically Disordered Proteins", "Marine Metagenomics", "Metabolomics",
                             "Microbial Biotechnology", "Plant Sciences", "Proteomics", "Rare Diseases"]
@@ -341,6 +350,7 @@ def _calculate_link_type_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The link type statistics.
     """
+    # TODO: Consider non-hardcoded approach
     LINK_TYPES: List[str] = ["Discussion forum", "Galaxy service", "Helpdesk", "Issue tracker", "Mailing list",
                              "Mirror", "Software catalogue", "Repository", "Social media", "Service",
                              "Technical monitoring", "Other"]
@@ -361,6 +371,7 @@ def _calculate_download_type_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The download type statistics.
     """
+    # TODO: Consider non-hardcoded approach
     DOWNLOAD_TYPES: List[str] = ["API specification", "Biological data", "Binaries", "Command-line specification",
                                  "Container file", "Icon", "Screenshot", "Source code", "Software package", "Test data",
                                  "Test script", "Tool wrapper (CWL)", "Tool wrapper (galaxy)", "Tool wrapper (taverna)",
@@ -381,6 +392,7 @@ def _calculate_documentation_type_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The documentation type statistics.
     """
+    # TODO: Consider non-hardcoded approach
     DOCUMENTATION_TYPES: List[str] = ["API documentation", "Citation instructions", "Code of conduct",
                                       "Command-line options", "Contributions policy", "FAQ", "General",
                                       "Governance", "Installation instructions", "Quick start guide", "Release notes",
@@ -402,6 +414,7 @@ def _calculate_publication_type_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The publication type statistics.
     """
+    # TODO: Consider non-hardcoded approach
     PUBLICATION_TYPES: List[str] = ["Primary", "Method", "Usage", "Benchmarking study", "Review", "Other"]
     publication_type_stats: Dict[str, int] = {key: 0 for key in PUBLICATION_TYPES}
 
@@ -420,6 +433,7 @@ def _calculate_credit_role_type_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The credit role type statistics.
     """
+    # TODO: Consider non-hardcoded approach
     CREDIT_ROLE_TYPES: List[str] = ["Developer", "Maintainer", "Provider", "Documentor", "Contributor", "Support",
                                     "Primary contact"]
     credit_role_type_stats: Dict[str, int] = {key: 0 for key in CREDIT_ROLE_TYPES}
@@ -438,6 +452,7 @@ def _calculate_relation_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The relation statistics.
     """
+    # TODO: Consider non-hardcoded approach
     RELATION_TYPES: List[str] = ["isNewVersionOf", "hasNewVersion", "uses", "usedBy", "includes", "includedIn"]
     relation_stats: Dict[str, int] = {key: 0 for key in RELATION_TYPES}
 
