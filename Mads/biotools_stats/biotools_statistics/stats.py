@@ -157,12 +157,59 @@ def _calculate_license_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The license statistics.
     """
-    LICENSE_TYPES: List[str] = ["OSIApproved", "Proprietary", "Other", "NoLicense"]
+    LICENSE_TYPES: List[str] = ["OSIApproved", "FSFApproved", "Freeware", "Proprietary", "Other", "NoLicense",
+                                "DeprecatedIdentifier"]
     # Obtained from: https://opensource.org/licenses/alphabetical
-    OSI_APPROVED_LICENSES: List[str] = ["ISC", "CDDL-1.0", "AFL-3.0", "APL-1.0", "MPL-1.1", "OSL-2.1", "GPL-3.0",
-                                        "MPL-2.0", "MIT", "Unlicense", "CECILL-2.1", "EPL-1.0", "NCSA", "GPL-2.0",
-                                        "BSD-2-Clause", "Artistic-2.0", "AGPL-3.0", "LGPL-2.1", "OSL-3.0",
-                                        "BSD-3-Clause", "Artistic-1.0", "Apache-2.0", "LGPL-3.0", "CPL-1.0"]
+    OSI_APPROVED_LICENSES: List[str] = ["0BSD", "AAL", "APL-1.0", "APSL-1.0", "APSL-1.1", "APSL-1.2", "Artistic-1.0",
+                                        "Artistic-1.0-cl8", "Artistic-1.0-Perl", "BSD-1-Clause", "BSD-2-Clause-Patent",
+                                        "BSD-3-Clause-LBNL", "CAL-1.0", "CAL-1.0-Combined-Work-Exception", "CATOSL-1.1",
+                                        "CECILL-2.1", "CERN-OHL-P-2.0", "CERN-OHL-S-2.0", "CERN-OHL-W-2.0",
+                                        "CNRI-Python", "CUA-OPL-1.0", "ECL-1.0", "EFL-1.0", "Entessa", "Fair",
+                                        "Frameworx-1.0", "LGPL-2.0-only", "LGPL-2.0-or-later", "LiLiQ-P-1.1",
+                                        "LiLiQ-R-1.1", "LiLiQ-Rplus-1.1", "LPL-1.0", "LPPL-1.3c", "MirOS", "MIT-0",
+                                        "MIT-Modern-Variant", "Motosoto", "MPL-1.0", "MPL-2.0-no-copyleft-exception",
+                                        "MulanPSL-2.0", "Multics", "NASA-1.3", "Naumen", "NGPL", "NPOSL-3.0", "NTP",
+                                        "OCLC-2.0", "OFL-1.1-no-RFN", "OFL-1.1-RFN", "OGTSL", "OLDAP-2.8",
+                                        "OSET-PL-2.1", "PHP-3.0", "PostgreSQL", "RPL-1.1", "RPL-1.5", "RSCPL",
+                                        "SimPL-2.0", "UCL-1.0", "Unicode-DFS-2016", "VSL-1.0", "Watcom-1.0", "Xnet",
+                                        "AFL-1.1", "AFL-1.2", "AFL-2.0", "AFL-2.1", "AFL-3.0", "AGPL-3.0-only",
+                                        "AGPL-3.0-or-later", "Apache-1.1", "Apache-2.0", "APSL-2.0", "Artistic-2.0",
+                                        "BSD-2-Clause", "BSD-3-Clause", "BSL-1.0", "CDDL-1.0", "CPAL-1.0", "CPL-1.0",
+                                        "ECL-2.0", "EFL-2.0", "EPL-1.0", "EPL-2.0", "EUDatagrid", "EUPL-1.1",
+                                        "EUPL-1.2", "GPL-2.0-only", "GPL-2.0-or-later", "GPL-3.0-only",
+                                        "GPL-3.0-or-later", "HPND", "Intel", "IPA", "IPL-1.0", "ISC",
+                                        "LGPL-2.1-only", "LGPL-2.1-or-later", "LGPL-3.0-only", "LGPL-3.0-or-later",
+                                        "LPL-1.02", "MIT", "MPL-1.1", "MPL-2.0", "MS-PL", "MS-RL", "NCSA", "Nokia",
+                                        "OFL-1.1", "OSL-1.0", "OSL-2.0", "OSL-2.1", "OSL-3.0", "PHP-3.01", "Python-2.0",
+                                        "QPL-1.0", "RPSL-1.0", "SISSL", "Sleepycat", "SPL-1.0", "Unlicense", "UPL-1.0",
+                                        "W3C", "Zlib", "ZPL-2.0", "ZPL-2.1"]
+    FSF_APPROVED_LICENSES: List[str] = ["ZPL-2.1", "ZPL-2.0", "Zlib", "Zimbra-1.3", "Zend-2.0", "YPL-1.1", "xinetd",
+                                        "XFree86-1.1", "X11", "WTFPL", "W3C", "Vim", "UPL-1.0", "Unlicense", "SPL-1.0",
+                                        "SMLNJ", "Sleepycat", "SISSL", "SGI-B-2.0", "Ruby", "RPSL-1.0", "QPL-1.0",
+                                        "Python-2.0", "PHP-3.01", "OSL-3.0", "OSL-2.1", "OSL-2.0", "OSL-1.1", "OSL-1.0",
+                                        "OpenSSL", "OLDAP-2.7", "OLDAP-2.3", "OFL-1.1", "OFL-1.0", "ODbL-1.0",
+                                        "NPL-1.1", "NPL-1.0", "NOSL", "Nokia", "NCSA", "MS-RL", "MS-PL", "MPL-2.0",
+                                        "MPL-1.1", "MIT", "LPPL-1.3a", "LPPL-1.2", "LPL-1.02", "LGPL-3.0-or-later",
+                                        "LGPL-3.0-only", "LGPL-2.1-or-later", "LGPL-2.1-only", "ISC", "IPL-1.0", "IPA",
+                                        "Intel", "Imlib2", "iMatix", "IJG", "HPND", "GPL-3.0-or-later", "GPL-3.0-only",
+                                        "GPL-2.0-or-later", "GPL-2.0-only", "gnuplot", "GFDL-1.3-or-later",
+                                        "GFDL-1.3-only", "GFDL-1.2-or-later", "GFDL-1.2-only", "GFDL-1.1-or-later",
+                                        "GFDL-1.1-only", "FTL", "FSFAP", "EUPL-1.2", "EUPL-1.1", "EUDatagrid",
+                                        "EPL-2.0", "EPL-1.0", "EFL-2.0", "ECL-2.0", "CPL-1.0", "CPAL-1.0", "Condor-1.1",
+                                        "ClArtistic", "CECILL-C", "CECILL-B", "CECILL-2.0", "CDDL-1.0", "CC0-1.0",
+                                        "CC-BY-SA-4.0", "CC-BY-4.0", "BSL-1.0", "BSD-4-Clause", "BSD-3-Clause-Clear",
+                                        "BSD-3-Clause", "BSD-2-Clause", "BitTorrent-1.1", "Artistic-2.0", "APSL-2.0",
+                                        "Apache-2.0", "Apache-1.1", "Apache-1.0", "AGPL-3.0-or-later", "AGPL-3.0-only",
+                                        "AFL-3.0", "AFL-2.1", "AFL-2.0", "AFL-1.2", "AFL-1.1"]
+    DEPRECATED_LICENSE_IDENTIFIERS: List[str] = ["AGPL-1.0", "AGPL-3.0", "BSD-2-Clause-FreeBSD", "BSD-2-Clause-NetBSD",
+                                                 "eCos-2.0", "GFDL-1.1", "GFDL-1.2", "GFDL-1.3", "GPL-1.0", "GPL-1.0+",
+                                                 "GPL-2.0", "GPL-2.0+", "GPL-2.0-with-autoconf-exception",
+                                                 "GPL-2.0-with-bison-exception", "GPL-2.0-with-classpath-exception",
+                                                 "GPL-2.0-with-font-exception", "GPL-2.0-with-GCC-exception", "GPL-3.0",
+                                                 "GPL-3.0+", "GPL-3.0-with-autoconf-exception",
+                                                 "GPL-3.0-with-GCC-exception", "LGPL-2.0", "LGPL-2.0+", "LGPL-2.1",
+                                                 "LGPL-2.1+", "LGPL-3.0", "LGPL-3.0+", "Nunit", "StandardML-NJ",
+                                                 "wxWindows"]
     license_stats: Dict[str, int] = {key: 0 for key in LICENSE_TYPES}
 
     for licens in [tool["license"] for tool in tools if "license" in tool]:
@@ -170,10 +217,16 @@ def _calculate_license_statistics(tools: list) -> dict:
             license_stats[licens] += 1
         elif licens == "Not licensed":
             license_stats["NoLicense"] += 1
-        elif licens in OSI_APPROVED_LICENSES:
-            # Check if it is an OSI approved license
-            license_stats["OSIApproved"] += 1
-
+        else:
+            if licens in OSI_APPROVED_LICENSES:
+                # Check if it is an OSI approved license
+                license_stats["OSIApproved"] += 1
+            if licens in FSF_APPROVED_LICENSES:
+                # Check if it is an FSF approved license
+                license_stats["FSFApproved"] += 1
+            if licens in DEPRECATED_LICENSE_IDENTIFIERS:
+                # Check if the license has a deprecated license identifier
+                license_stats["DeprecatedIdentifier"] += 1
     return license_stats
 
 
