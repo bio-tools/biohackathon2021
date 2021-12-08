@@ -87,8 +87,8 @@ def calculate_general_statistics(tools: list, upper_time_limit: datetime = datet
     stats["relationCount"] = sum([len(tool["relation"]) for tool in tools if "relation" in tool])
     stats["relations"] = _calculate_relation_statistics(tools=tools)
 
-    stats["hasCommunity"] = len([tool for tool in tools if "community" in tool])
-    stats["communityCount"] = sum([len(tool["community"]) for tool in tools if "community" in tool])
+    stats["hasBiolib"] = len([tool for tool in tools if "community" in tool])
+    stats["BiolibCount"] = sum([len(tool["community"]) for tool in tools if "community" in tool])
 
     return stats
 
@@ -374,8 +374,8 @@ def _calculate_download_type_statistics(tools: list) -> dict:
     # TODO: Consider non-hardcoded approach
     DOWNLOAD_TYPES: List[str] = ["API specification", "Biological data", "Binaries", "Command-line specification",
                                  "Container file", "Icon", "Screenshot", "Source code", "Software package", "Test data",
-                                 "Test script", "Tool wrapper (CWL)", "Tool wrapper (galaxy)", "Tool wrapper (taverna)",
-                                 "Tool wrapper (other)", "VM image", "Downloads page", "Other"]
+                                 "Test script", "Tool wrapper (CWL)", "Tool wrapper (Galaxy)", "Tool wrapper (Taverna)",
+                                 "Tool wrapper (Other)", "VM image", "Downloads page", "Other"]
     download_type_stats: Dict[str, int] = {key: 0 for key in DOWNLOAD_TYPES}
 
     for downloads in [tool["download"] for tool in tools if "download" in tool]:
