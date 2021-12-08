@@ -136,11 +136,12 @@ def _calculate_language_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The language statistics.
     """
-    LANGUAGES: List[str] = ["Scala", "R", "Lua", "Haskell", "Prolog", "ActionScript", "CWL", "Smalltalk", "Perl",
-                            "JavaScript", "Mathematica", "OCaml", "Verilog", "Elm", "Java", "Shell", "Ruby", "Lisp",
-                            "PyMOL", "Fortran", "Visual Basic", "LabVIEW", "Racket", "Maple", "Julia", "AWK", "Delphi",
-                            "MATLAB", "C++", "Python", "Forth", "Other", "SAS", "VHDL", "PHP", "JSP", "Groovy", "Bash",
-                            "Ada", "C#", "SQL", "C", "Pascal", "D"]
+    LANGUAGES: List[str] = ["ActionScript", "Ada", "AppleScript", "Assembly language", "AWK", "Bash", "C", "C#", "C++",
+                            "COBOL", "ColdFusion", "CWL", "D", "Delphi", "Dylan", "Eiffel", "Elm", "Forth", "Fortran",
+                            "Groovy", "Haskell", "Icarus", "Java", "JavaScript", "JSP", "Julia", "LabVIEW", "Lisp",
+                            "Lua", "Maple", "Mathematica", "MATLAB", "MLXTRAN", "NMTRAN", "OCaml", "Pascal", "Perl",
+                            "PHP", "Prolog", "PyMOL", "Python", "R", "Racket", "REXX", "Ruby", "SAS", "Scala", "Scheme",
+                            "Shell", "Smalltalk", "SQL", "Turing", "Verilog", "VHDL", "Visual Basic", "XAML", "Other"]
     language_stats: Dict[str, int] = {key: 0 for key in LANGUAGES}
 
     for languages in [tool["language"] for tool in tools if "language" in tool]:
