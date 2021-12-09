@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Dict, Union, List
 
 from ._utilities import clean_and_filter_tool_list
-
+from ._spdx_license_parser import parse_license_list, LicensesData
 
 def calculate_general_statistics(tools: list, upper_time_limit: datetime = datetime.today()):
     """
@@ -164,108 +164,14 @@ def _calculate_license_statistics(tools: list) -> dict:
     :param tools: The list of tools.
     :return: The license statistics.
     """
-    # TODO: Consider non-hardcoded approach
+    license_info: LicensesData = parse_license_list()
+
     LICENSE_TYPES: List[str] = ["OSIApproved", "FSFApproved", "Freeware", "Proprietary", "Other", "NoLicense",
-                                "DeprecatedIdentifier", "0BSD", "AAL", "ADSL", "AFL-1.1", "AFL-1.2", "AFL-2.0",
-                                "AFL-2.1", "AFL-3.0", "AGPL-1.0", "AGPL-3.0", "AMDPLPA", "AML", "AMPAS", "ANTLR-PD",
-                                "APAFML", "APL-1.0", "APSL-1.0", "APSL-1.1", "APSL-1.2", "APSL-2.0", "Abstyles",
-                                "Adobe-2006", "Adobe-Glyph", "Afmparse", "Aladdin", "Apache-1.0", "Apache-1.1",
-                                "Apache-2.0", "Artistic-1.0", "Artistic-1.0-Perl", "Artistic-1.0-cl8", "Artistic-2.0",
-                                "BSD-2-Clause", "BSD-2-Clause-FreeBSD", "BSD-2-Clause-NetBSD", "BSD-3-Clause",
-                                "BSD-3-Clause-Attribution", "BSD-3-Clause-Clear", "BSD-3-Clause-LBNL",
-                                "BSD-3-Clause-No-Nuclear-License", "BSD-3-Clause-No-Nuclear-License-2014",
-                                "BSD-3-Clause-No-Nuclear-Warranty", "BSD-4-Clause", "BSD-4-Clause-UC", "BSD-Protection",
-                                "BSD-Source-Code", "BSL-1.0", "Bahyph", "Barr", "Beerware", "BitTorrent-1.0",
-                                "BitTorrent-1.1", "Borceux", "CATOSL-1.1", "CC-BY-1.0", "CC-BY-2.0", "CC-BY-2.5",
-                                "CC-BY-3.0", "CC-BY-4.0", "CC-BY-NC-1.0", "CC-BY-NC-2.0", "CC-BY-NC-2.5",
-                                "CC-BY-NC-3.0", "CC-BY-NC-4.0", "CC-BY-NC-ND-1.0", "CC-BY-NC-ND-2.0", "CC-BY-NC-ND-2.5",
-                                "CC-BY-NC-ND-3.0", "CC-BY-NC-ND-4.0", "CC-BY-NC-SA-1.0", "CC-BY-NC-SA-2.0",
-                                "CC-BY-NC-SA-2.5", "CC-BY-NC-SA-3.0", "CC-BY-NC-SA-4.0", "CC-BY-ND-1.0",
-                                "CC-BY-ND-2.0", "CC-BY-ND-2.5", "CC-BY-ND-3.0", "CC-BY-ND-4.0", "CC-BY-SA-1.0",
-                                "CC-BY-SA-2.0", "CC-BY-SA-2.5", "CC-BY-SA-3.0", "CC-BY-SA-4.0", "CC0-1.0", "CDDL-1.0",
-                                "CDDL-1.1", "CECILL-1.0", "CECILL-1.1", "CECILL-2.0", "CECILL-2.1", "CECILL-B",
-                                "CECILL-C", "CNRI-Jython", "CNRI-Python", "CNRI-Python-GPL-Compatible", "CPAL-1.0",
-                                "CPL-1.0", "CPOL-1.02", "CUA-OPL-1.0", "Caldera", "ClArtistic", "Condor-1.1",
-                                "Crossword", "CrystalStacker", "Cube", "D-FSL-1.0", "DOC", "DSDP", "Dotseqn",
-                                "ECL-1.0", "ECL-2.0", "EFL-1.0", "EFL-2.0", "EPL-1.0", "EUDatagrid", "EUPL-1.0",
-                                "EUPL-1.1", "Entessa", "ErlPL-1.1", "Eurosym", "FSFAP", "FSFUL", "FSFULLR", "FTL",
-                                "Fair", "Frameworx-1.0", "FreeImage", "GFDL-1.1", "GFDL-1.2", "GFDL-1.3", "GL2PS",
-                                "GPL-1.0", "GPL-2.0", "GPL-3.0", "Giftware", "Glide", "Glulxe", "HPND", "HaskellReport",
-                                "IBM-pibs", "ICU", "IJG", "IPA", "IPL-1.0", "ISC", "ImageMagick", "Imlib2", "Info-ZIP",
-                                "Intel", "Intel-ACPI", "Interbase-1.0", "JSON", "JasPer-2.0", "LAL-1.2", "LAL-1.3",
-                                "LGPL-2.0", "LGPL-2.1", "LGPL-3.0", "LGPLLR", "LPL-1.0", "LPL-1.02", "LPPL-1.0",
-                                "LPPL-1.1", "LPPL-1.2", "LPPL-1.3a", "LPPL-1.3c", "Latex2e", "Leptonica", "LiLiQ-P-1.1",
-                                "LiLiQ-R-1.1", "LiLiQ-Rplus-1.1", "Libpng", "MIT", "MIT-CMU", "MIT-advertising",
-                                "MIT-enna", "MIT-feh", "MITNFA", "MPL-1.0", "MPL-1.1", "MPL-2.0",
-                                "MPL-2.0-no-copyleft-exception", "MS-PL", "MS-RL", "MTLL", "MakeIndex", "MirOS",
-                                "Motosoto", "Multics", "Mup", "NASA-1.3", "NBPL-1.0", "NCSA", "NGPL", "NLOD-1.0",
-                                "NLPL", "NOSL", "NPL-1.0", "NPL-1.1", "NPOSL-3.0", "NRL", "NTP", "Naumen", "NetCDF",
-                                "Newsletr", "Nokia", "Noweb", "Nunit", "OCCT-PL", "OCLC-2.0", "ODbL-1.0", "OFL-1.0",
-                                "OFL-1.1", "OGTSL", "OLDAP-1.1", "OLDAP-1.2", "OLDAP-1.3", "OLDAP-1.4", "OLDAP-2.0",
-                                "OLDAP-2.0.1", "OLDAP-2.1", "OLDAP-2.2", "OLDAP-2.2.1", "OLDAP-2.2.2", "OLDAP-2.3",
-                                "OLDAP-2.4", "OLDAP-2.5", "OLDAP-2.6", "OLDAP-2.7", "OLDAP-2.8", "OML", "OPL-1.0",
-                                "OSET-PL-2.1", "OSL-1.0", "OSL-1.1", "OSL-2.0", "OSL-2.1", "OSL-3.0", "OpenSSL",
-                                "PDDL-1.0", "PHP-3.0", "PHP-3.01", "Plexus", "PostgreSQL", "Python-2.0", "QPL-1.0",
-                                "Qhull", "RHeCos-1.1", "RPL-1.1", "RPL-1.5", "RPSL-1.0", "RSA-MD", "RSCPL", "Rdisc",
-                                "Ruby", "SAX-PD", "SCEA", "SGI-B-1.0", "SGI-B-1.1", "SGI-B-2.0", "SISSL", "SISSL-1.2",
-                                "SMLNJ", "SMPPL", "SNIA", "SPL-1.0", "SWL", "Saxpath", "Sendmail", "SimPL-2.0",
-                                "Sleepycat", "Spencer-86", "Spencer-94", "Spencer-99", "SugarCRM-1.1.3", "TCL", "TMate",
-                                "TORQUE-1.1", "TOSL", "UPL-1.0", "Unicode-TOU", "Unlicense", "VOSTROM", "VSL-1.0",
-                                "Vim", "W3C", "W3C-19980720", "WTFPL", "Watcom-1.0", "Wsuipa", "X11", "XFree86-1.1",
-                                "XSkat", "Xerox", "Xnet", "YPL-1.0", "YPL-1.1", "ZPL-1.1", "ZPL-2.0", "ZPL-2.1", "Zed",
-                                "Zend-2.0", "Zimbra-1.3", "Zimbra-1.4", "Zlib", "bzip2-1.0.5", "bzip2-1.0.6", "curl",
-                                "diffmark", "dvipdfm", "eGenix", "gSOAP-1.3b", "gnuplot", "iMatix", "libtiff", "mpich2",
-                                "psfrag", "psutils", "xinetd", "xpp", "zlib-acknowledgement"]
-    OSI_APPROVED_LICENSES: List[str] = ["0BSD", "AAL", "APL-1.0", "APSL-1.0", "APSL-1.1", "APSL-1.2", "Artistic-1.0",
-                                        "Artistic-1.0-cl8", "Artistic-1.0-Perl", "BSD-1-Clause", "BSD-2-Clause-Patent",
-                                        "BSD-3-Clause-LBNL", "CAL-1.0", "CAL-1.0-Combined-Work-Exception", "CATOSL-1.1",
-                                        "CECILL-2.1", "CERN-OHL-P-2.0", "CERN-OHL-S-2.0", "CERN-OHL-W-2.0",
-                                        "CNRI-Python", "CUA-OPL-1.0", "ECL-1.0", "EFL-1.0", "Entessa", "Fair",
-                                        "Frameworx-1.0", "LGPL-2.0-only", "LGPL-2.0-or-later", "LiLiQ-P-1.1",
-                                        "LiLiQ-R-1.1", "LiLiQ-Rplus-1.1", "LPL-1.0", "LPPL-1.3c", "MirOS", "MIT-0",
-                                        "MIT-Modern-Variant", "Motosoto", "MPL-1.0", "MPL-2.0-no-copyleft-exception",
-                                        "MulanPSL-2.0", "Multics", "NASA-1.3", "Naumen", "NGPL", "NPOSL-3.0", "NTP",
-                                        "OCLC-2.0", "OFL-1.1-no-RFN", "OFL-1.1-RFN", "OGTSL", "OLDAP-2.8",
-                                        "OSET-PL-2.1", "PHP-3.0", "PostgreSQL", "RPL-1.1", "RPL-1.5", "RSCPL",
-                                        "SimPL-2.0", "UCL-1.0", "Unicode-DFS-2016", "VSL-1.0", "Watcom-1.0", "Xnet",
-                                        "AFL-1.1", "AFL-1.2", "AFL-2.0", "AFL-2.1", "AFL-3.0", "AGPL-3.0-only",
-                                        "AGPL-3.0-or-later", "Apache-1.1", "Apache-2.0", "APSL-2.0", "Artistic-2.0",
-                                        "BSD-2-Clause", "BSD-3-Clause", "BSL-1.0", "CDDL-1.0", "CPAL-1.0", "CPL-1.0",
-                                        "ECL-2.0", "EFL-2.0", "EPL-1.0", "EPL-2.0", "EUDatagrid", "EUPL-1.1",
-                                        "EUPL-1.2", "GPL-2.0-only", "GPL-2.0-or-later", "GPL-3.0-only",
-                                        "GPL-3.0-or-later", "HPND", "Intel", "IPA", "IPL-1.0", "ISC",
-                                        "LGPL-2.1-only", "LGPL-2.1-or-later", "LGPL-3.0-only", "LGPL-3.0-or-later",
-                                        "LPL-1.02", "MIT", "MPL-1.1", "MPL-2.0", "MS-PL", "MS-RL", "NCSA", "Nokia",
-                                        "OFL-1.1", "OSL-1.0", "OSL-2.0", "OSL-2.1", "OSL-3.0", "PHP-3.01", "Python-2.0",
-                                        "QPL-1.0", "RPSL-1.0", "SISSL", "Sleepycat", "SPL-1.0", "Unlicense", "UPL-1.0",
-                                        "W3C", "Zlib", "ZPL-2.0", "ZPL-2.1"]
-    FSF_APPROVED_LICENSES: List[str] = ["ZPL-2.1", "ZPL-2.0", "Zlib", "Zimbra-1.3", "Zend-2.0", "YPL-1.1", "xinetd",
-                                        "XFree86-1.1", "X11", "WTFPL", "W3C", "Vim", "UPL-1.0", "Unlicense", "SPL-1.0",
-                                        "SMLNJ", "Sleepycat", "SISSL", "SGI-B-2.0", "Ruby", "RPSL-1.0", "QPL-1.0",
-                                        "Python-2.0", "PHP-3.01", "OSL-3.0", "OSL-2.1", "OSL-2.0", "OSL-1.1", "OSL-1.0",
-                                        "OpenSSL", "OLDAP-2.7", "OLDAP-2.3", "OFL-1.1", "OFL-1.0", "ODbL-1.0",
-                                        "NPL-1.1", "NPL-1.0", "NOSL", "Nokia", "NCSA", "MS-RL", "MS-PL", "MPL-2.0",
-                                        "MPL-1.1", "MIT", "LPPL-1.3a", "LPPL-1.2", "LPL-1.02", "LGPL-3.0-or-later",
-                                        "LGPL-3.0-only", "LGPL-2.1-or-later", "LGPL-2.1-only", "ISC", "IPL-1.0", "IPA",
-                                        "Intel", "Imlib2", "iMatix", "IJG", "HPND", "GPL-3.0-or-later", "GPL-3.0-only",
-                                        "GPL-2.0-or-later", "GPL-2.0-only", "gnuplot", "GFDL-1.3-or-later",
-                                        "GFDL-1.3-only", "GFDL-1.2-or-later", "GFDL-1.2-only", "GFDL-1.1-or-later",
-                                        "GFDL-1.1-only", "FTL", "FSFAP", "EUPL-1.2", "EUPL-1.1", "EUDatagrid",
-                                        "EPL-2.0", "EPL-1.0", "EFL-2.0", "ECL-2.0", "CPL-1.0", "CPAL-1.0", "Condor-1.1",
-                                        "ClArtistic", "CECILL-C", "CECILL-B", "CECILL-2.0", "CDDL-1.0", "CC0-1.0",
-                                        "CC-BY-SA-4.0", "CC-BY-4.0", "BSL-1.0", "BSD-4-Clause", "BSD-3-Clause-Clear",
-                                        "BSD-3-Clause", "BSD-2-Clause", "BitTorrent-1.1", "Artistic-2.0", "APSL-2.0",
-                                        "Apache-2.0", "Apache-1.1", "Apache-1.0", "AGPL-3.0-or-later", "AGPL-3.0-only",
-                                        "AFL-3.0", "AFL-2.1", "AFL-2.0", "AFL-1.2", "AFL-1.1"]
-    DEPRECATED_LICENSE_IDENTIFIERS: List[str] = ["AGPL-1.0", "AGPL-3.0", "BSD-2-Clause-FreeBSD", "BSD-2-Clause-NetBSD",
-                                                 "eCos-2.0", "GFDL-1.1", "GFDL-1.2", "GFDL-1.3", "GPL-1.0", "GPL-1.0+",
-                                                 "GPL-2.0", "GPL-2.0+", "GPL-2.0-with-autoconf-exception",
-                                                 "GPL-2.0-with-bison-exception", "GPL-2.0-with-classpath-exception",
-                                                 "GPL-2.0-with-font-exception", "GPL-2.0-with-GCC-exception", "GPL-3.0",
-                                                 "GPL-3.0+", "GPL-3.0-with-autoconf-exception",
-                                                 "GPL-3.0-with-GCC-exception", "LGPL-2.0", "LGPL-2.0+", "LGPL-2.1",
-                                                 "LGPL-2.1+", "LGPL-3.0", "LGPL-3.0+", "Nunit", "StandardML-NJ",
-                                                 "wxWindows"]
+                                "DeprecatedIdentifier"] + license_info.licenses_list
+    OSI_APPROVED_LICENSES: List[str] = license_info.osi_approved_licenses
+    FSF_APPROVED_LICENSES: List[str] = license_info.fsf_approved_licenses
+    DEPRECATED_LICENSE_IDENTIFIERS: List[str] = license_info.deprecated_licenses
+
     license_stats: Dict[str, int] = {key: 0 for key in LICENSE_TYPES}
 
     for licens in [tool["license"] for tool in tools if "license" in tool]:
