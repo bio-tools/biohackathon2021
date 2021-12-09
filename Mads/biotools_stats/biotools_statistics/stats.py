@@ -7,6 +7,7 @@ from typing import Dict, Union, List
 from ._utilities import clean_and_filter_tool_list
 from ._spdx_license_parser import parse_license_list, LicensesData
 
+
 def calculate_general_statistics(tools: list, upper_time_limit: datetime = datetime.today()):
     """
     Calculate the general statistics for a list of tools.
