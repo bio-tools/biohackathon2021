@@ -84,6 +84,9 @@ def calculate_general_statistics(tools: list, upper_time_limit: datetime = datet
     stats["publicationTypes"] = _calculate_publication_type_statistics(tools=tools)
 
     stats["hasCredit"] = len([tool for tool in tools if "credit" in tool])
+    stats["hasCreditRole"] = len([tool for tool in tools if ("credit" in tool and
+                                                             len([role for role in tool["credit"] if
+                                                                  "credit" in tool]) > 0)])
     stats["creditCount"] = sum([len(tool["credit"]) for tool in tools if "credit" in tool])
     stats["creditRoleTypes"] = _calculate_credit_role_type_statistics(tools=tools)
 
