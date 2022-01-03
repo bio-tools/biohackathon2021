@@ -1,9 +1,6 @@
 """
 Utilities for the parsing the license list from SPDX.
-
-Possibly move to https://github.com/Kigaard/BiotoolsUtils
 """
-import json
 from dataclasses import dataclass
 from typing import List, Dict
 import requests
